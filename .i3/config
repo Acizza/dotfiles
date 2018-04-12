@@ -141,4 +141,5 @@ exec_always --no-startup-id ~/.config/polybar/launch.sh
 
 # startup programs
 exec numlockx
+exec ibus-daemon -d
 exec --no-startup-id "sh -c 'sleep 10; exec  ~/projects/rust/bcnotif/target/release/bcnotif'"
