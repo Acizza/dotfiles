@@ -3,4 +3,7 @@
 backgrounds=(~/backgrounds/active/*.{jpg,png})
 
 rand=$[ $RANDOM % ${#backgrounds[@]} ]
-exec feh --bg-scale ${backgrounds[$rand]}
+background=${backgrounds[$rand]}
+
+feh --bg-scale $background
+wal -q -n -i $background

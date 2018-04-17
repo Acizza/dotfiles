@@ -133,10 +133,26 @@ mode "$mode_system" {
 
 bindsym $mod+End mode "$mode_system"
 
+exec --no-startup-id ~/random_background.sh
+
+default_border normal 3
+
+set_from_resource $fg i3wm.color7 #f0f0f0
+set_from_resource $f_bg i3wm.color4 #f0f0f0
+set_from_resource $bg i3wm.color2 #f0f0f0
+set_from_resource $fi_bg i3wm.color6 #f0f0f0
+
+# colors                border  backgr. text indicator child_border
+client.focused          $f_bg   $f_bg   $fg  $f_bg       $f_bg
+client.focused_inactive $fi_bg  $fi_bg  $fg  $fi_bg      $fi_bg
+client.unfocused        $bg     $bg     $fg  $bg         $bg
+client.urgent           $bg     $bg     $fg  $bg         $bg
+client.placeholder      $bg     $bg     $fg  $bg         $bg
+client.background       $bg
+
 # start i3-gaps
 gaps inner 20
 
-exec --no-startup-id ~/random_background.sh
 exec_always --no-startup-id ~/.config/polybar/launch.sh
 
 # startup programs
