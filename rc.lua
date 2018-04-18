@@ -20,7 +20,7 @@ local separator = require("widgets/separator")
 local disk_usage = require("widgets/disk_usage")
 local ram = require("widgets/ram")
 local cpu_usage = require("widgets/cpu_usage")
-local volume = require("widgets/volume")
+local volume_widget = require("widgets/volume")
 
 if awesome.startup_errors then
     naughty.notify({
@@ -127,7 +127,7 @@ do
                 separator.middle,
                 cpu_usage.widget,
                 separator.middle,
-                volume.widget,
+                volume_widget.widget,
                 separator.middle,
                 clock,
                 separator.right,
@@ -194,9 +194,15 @@ do
         -- Open run dialog
         awful.key({ config.modkey }, "d", run_dialog.open),
         -- Raise volume
-        awful.key({}, "XF86AudioRaiseVolume", function() adjust_system_volume("inc") end),
+        awful.key({}, "XF86AudioRaiseVolume", function()
+            adjust_system_volume("inc")
+            volume_widget.update()
+        end),
         -- Lower volume
-        awful.key({}, "XF86AudioLowerVolume", function() adjust_system_volume("dec") end),
+        awful.key({}, "XF86AudioLowerVolume", function()
+            adjust_system_volume("dec")
+            volume_widget.update()
+        end),
         -- Toggle volume mute
         awful.key({}, "XF86AudioMute", function() adjust_system_volume("toggle") end)
     )
