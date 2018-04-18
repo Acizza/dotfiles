@@ -8,6 +8,10 @@ local widget = require("widgets/widget")
 volume_widget.update_time_secs = 15
 volume_widget.muted_color = "#ffe100"
 
+local string_match = string.match
+local string_format = string.format
+local table_pack = table.pack
+
 local run_command = "amixer sget " .. config.audio_source
 
 local last_status = {
@@ -18,7 +22,7 @@ local last_status = {
 local monitor_widget = ValueMonitor:new {
     label = "VOL",
     format_value = function(status)
-        return string.format("%d%%", status.volume)
+        return string_format("%d%%", status.volume)
     end,
     updated_value = function(values, status, last_status)
         local has_changed = status.volume ~= last_status.volume or
@@ -44,7 +48,7 @@ volume_widget.widget = wibox.widget {
 }
 
 local function update_from_output(stdout)
-    local volume_info = table.pack(string.match(stdout, "%[(%d+)%%%] %[(%a+)%]"))
+    local volume_info = table_pack(string_match(stdout, "%[(%d+)%%%] %[(%a+)%]"))
 
     local status = {
         volume = volume_info[1],

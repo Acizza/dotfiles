@@ -4,6 +4,8 @@ local wibox = require("wibox")
 ValueMonitor = {}
 ValueMonitor.__index = ValueMonitor
 
+local string_format = string.format
+
 -- Creates a new value monitor.
 --
 -- Possible table contents for the values parameter:
@@ -57,7 +59,7 @@ function ValueMonitor:set_value(value)
     local formatted_value = self.format_value(value)
     if self.is_formatted_equal(formatted_value, self.last_formatted_value) then return end
 
-    local text = string.format(
+    local text = string_format(
         "<span color=\"%s\">%s</span> <span color=\"%s\">%s</span>",
         values.label_color or self.label_color,
         values.label or self.label,

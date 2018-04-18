@@ -8,6 +8,10 @@ disk_usage.partitions = { "/", "/home" }
 disk_usage.update_time_secs = 30
 disk_usage.space_between_partitions = 20
 
+local string_format = string.format
+local string_match = string.match
+local table_pack = table.pack
+
 local run_command = "df -k " .. table.concat(disk_usage.partitions, " ")
 local partition_data = {}
 
@@ -18,7 +22,7 @@ for _,partition in pairs(disk_usage.partitions) do
             label = partition,
             format_value = function(available_kb)
                 local usage_gb = available_kb / 1024 / 1024
-                return string.format("%0.02f GB", usage_gb)
+                return string_format("%0.02f GB", usage_gb)
             end,
         },
     }
@@ -29,19 +33,22 @@ do
     local is_first_index = true
 
     for _,data in pairs(partition_data) do
+        local widget
+
         if not is_first_index then
-            table.insert(widgets, {
+            widget = {
                 widget = wibox.container.margin,
                 left = disk_usage.space_between_partitions,
                 {
                     layout = wibox.layout.fixed.horizontal,
                     data.monitor_widget.textbox,
                 }
-            })
+            }
         else
-            table.insert(widgets, data.monitor_widget.textbox)
+            widget = data.monitor_widget.textbox
         end
 
+        widgets[#widgets + 1] = widget
         is_first_index = false
     end
 
@@ -53,8 +60,8 @@ end
 
 awful.widget.watch(run_command, disk_usage.update_time_secs, function(widget, stdout)
     for _,data in pairs(partition_data) do
-        local usage_info = table.pack(
-            stdout:match("%d+%s-(%d+)%s-%d+%%%s-" .. data.partition .. "\n"))
+        local usage_info = table_pack(
+            string_match(stdout, "%d+%s-(%d+)%s-%d+%%%s-" .. data.partition .. "\n"))
 
         local available_kb = usage_info[1]
         data.monitor_widget:set_value(available_kb)

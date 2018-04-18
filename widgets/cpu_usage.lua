@@ -6,10 +6,14 @@ local widget = require("widgets/widget")
 
 cpu_usage.update_time_secs = 1.5
 
+local string_format = string.format
+local string_match = string.match
+local string_gmatch = string.gmatch
+
 local monitor_widget = ValueMonitor:new {
     label = "CPU",
     format_value = function(value)
-        return string.format("%.01f%%", value)
+        return string_format("%.01f%%", value)
     end,
 }
 
@@ -32,7 +36,7 @@ awful.widget.watch("cat /proc/stat", cpu_usage.update_time_secs, function(widget
 
     local index = 1
     
-    for jiffie in stdout:match("cpu (.-)\n"):gmatch("%d+") do
+    for jiffie in string_gmatch(string_match(stdout, "cpu (.-)\n"), "%d+") do
         state.total_jiffies = state.total_jiffies + jiffie
 
         if index <= 3 then
