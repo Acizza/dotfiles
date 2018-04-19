@@ -19,6 +19,7 @@ local shutdown_menu = require("module/system/shutdown_menu")
 local volume_module = require("module/volume")
 
 local separator = require("widgets/separator")
+local update_status = require("widgets/update_status")
 local disk_usage = require("widgets/disk_usage")
 local ram = require("widgets/ram")
 local cpu_usage = require("widgets/cpu_usage")
@@ -123,6 +124,8 @@ do
                 layout = wibox.layout.fixed.horizontal,
                 buttons = scroll_tags_buttons,
                 separator.left,
+                update_status.widget,
+                separator.middle,
                 disk_usage.widget,
                 separator.middle,
                 ram.widget,
