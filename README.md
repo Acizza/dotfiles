@@ -10,4 +10,4 @@ If you do want to try this configuration out for whatever reason, the dependenci
 **System:**
 * `systemd`
 
-Note that the systemd requirement can easily be removed, as it is only used for handling system shutdown options in `shutdown_menu.lua`.
+Note that the systemd requirement can easily be removed, as it is only used for handling system shutdown options in `module/system/shutdown_menu.lua`.

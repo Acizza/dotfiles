@@ -8,13 +8,15 @@ local beautiful = require("beautiful")
 local naughty = require("naughty")
 
 local config = require("config")
-local util = require("util")
-
-local run_dialog = require("run_dialog")
-local shutdown_menu = require("shutdown_menu")
 
 -- Init the theme now so widgets can access custom theme values
 beautiful.init(config.theme_path)
+
+local util = require("util")
+
+local run_dialog = require("run_dialog")
+local shutdown_menu = require("module/system/shutdown_menu")
+local volume_module = require("module/volume")
 
 local separator = require("widgets/separator")
 local disk_usage = require("widgets/disk_usage")
@@ -146,22 +148,6 @@ do
 end
 
 do
-    -- TODO: move somewhere that actually makes sense
-    -- Values of type: inc, dec, toggle
-    local function adjust_system_volume(type)
-        local operation
-
-        if type == "inc" then
-            operation = "1%+"
-        elseif type == "dec" then
-            operation = "1%-"
-        elseif type == "toggle" then
-            operation = "toggle"
-        end
-
-        awesome.spawn("amixer -q sset " .. config.audio_source .. " " .. operation)
-    end
-
     local global_keys = gears.table.join(
         -- Open the shutdown menu
         awful.key({ config.modkey }, "End", shutdown_menu.open),
@@ -194,17 +180,11 @@ do
         -- Open run dialog
         awful.key({ config.modkey }, "d", run_dialog.open),
         -- Raise volume
-        awful.key({}, "XF86AudioRaiseVolume", function()
-            adjust_system_volume("inc")
-            volume_widget.update()
-        end),
+        awful.key({}, "XF86AudioRaiseVolume", volume_module.increment_source),
         -- Lower volume
-        awful.key({}, "XF86AudioLowerVolume", function()
-            adjust_system_volume("dec")
-            volume_widget.update()
-        end),
+        awful.key({}, "XF86AudioLowerVolume", volume_module.decrement_source),
         -- Toggle volume mute
-        awful.key({}, "XF86AudioMute", function() adjust_system_volume("toggle") end)
+        awful.key({}, "XF86AudioMute", volume_module.toggle_source_mute)
     )
 
     for i,shortcut in pairs(config.program_shortcuts) do

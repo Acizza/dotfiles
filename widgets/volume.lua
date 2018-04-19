@@ -59,9 +59,7 @@ local function update_from_output(stdout)
 end
 
 function volume_widget.update()
-    awful.spawn.easy_async(run_command, function(stdout)
-        update_from_output(stdout)
-    end)
+    awful.spawn.easy_async(run_command, update_from_output)
 end
 
 awful.widget.watch(run_command, volume_widget.update_time_secs, function(_, stdout)
