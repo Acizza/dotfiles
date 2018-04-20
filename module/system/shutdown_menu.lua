@@ -78,13 +78,13 @@ local function initialize()
     local option_items = {}
 
     for i,option in pairs(shutdown_menu.options) do
-        table.insert(option_items, wibox.widget {
+        option_items[#option_items + 1] = wibox.widget {
             markup = option.name,
             align = "center",
             valign = "center",
             widget = wibox.widget.textbox,
             font = "oxygen 24",
-        })
+        }
     end
 
     shutdown_menu.panel:setup({
