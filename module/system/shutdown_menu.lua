@@ -87,15 +87,28 @@ local function initialize()
         }
     end
 
-    shutdown_menu.panel:setup({
+    local items_widget = wibox.widget {
         layout = wibox.layout.fixed.vertical,
+        header_text,
         {
-            top = size.height * 0.3,
-            bottom = 75,
             layout = wibox.container.margin,
-            header_text,
+            top = 75,
         },
         unpack(option_items)
+    }
+
+    shutdown_menu.panel:setup({
+        layout = wibox.layout.flex.vertical,
+        {
+            layout = wibox.layout.fixed.vertical,
+        },
+        {
+            layout = wibox.layout.fixed.vertical,
+            items_widget,
+        },
+        {
+            layout = wibox.layout.fixed.vertical,
+        },
     })
 end
 
