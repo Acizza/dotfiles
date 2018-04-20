@@ -86,6 +86,14 @@ local function parse_command_output(stdout, stderr, exit_code)
     end)
 end
 
+function update_status.update()
+    value_monitor:set_value(MonitorState.Checking)
+
+    awful.spawn.easy_async(run_command, function(stdout, stderr, _, exit_code)
+        parse_command_output(stdout, stderr, exit_code)
+    end)
+end
+
 if not config.dev_environment then
     -- Create an initial delay to allow an internet connection to be established
     gears.timer {
@@ -93,15 +101,13 @@ if not config.dev_environment then
         autostart = true,
         single_shot = true,
         callback = function()
-            value_monitor:set_value(MonitorState.Checking)
+            update_status.update()
 
-            awful.widget.watch(
-                run_command,
-                update_status.update_time_hours * 3600,
-                function(_, stdout, stderr, _, exit_code)
-                    parse_command_output(stdout, stderr, exit_code)
-                end
-            )
+            gears.timer {
+                timeout = update_status.update_time_hours * 3600,
+                autostart = true,
+                callback = update_status.update,
+            }
         end
     }
 end
