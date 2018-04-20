@@ -3,8 +3,6 @@ local awful = require("awful")
 local gears = require("gears")
 local util = require("util")
 
-config.dev_environment = false
-
 config.home_path = os.getenv("HOME") .. "/"
 config.awesome_config = gears.filesystem.get_configuration_dir()
 
@@ -59,5 +57,7 @@ config.startup_programs = {
 }
 
 config.audio_source = "Master"
+
+config.dev_environment = os.getenv("AWESOME_DEV") == "1"
 
 return config
