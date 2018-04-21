@@ -12,19 +12,39 @@ local popup = WidgetPopup:new {
     height = 200,
 }
 
-popup.uptime_timer = gears.timer {
-    timeout = 1,
-    autostart = false,
-    callback = function() popup:update_uptime() end,
-}
+function popup:initialize()
+    self.uptime_timer = gears.timer {
+        timeout = 1,
+        autostart = false,
+        callback = function() popup:update_uptime() end,
+    }
+    
+    self.uptime_widget = ValueMonitor:new {
+        label = "Uptime",
+        format_value = function(time)
+            return os_date("!%H:%M:%S", time)
+        end,
+        is_formatted_equal = function() return false end,
+    }
 
-popup.uptime_widget = ValueMonitor:new {
-    label = "Uptime",
-    format_value = function(time)
-        return os_date("!%H:%M:%S", time)
-    end,
-    is_formatted_equal = function() return false end,
-}
+    self:setup({
+        layout = wibox.layout.fixed.vertical,
+        {
+            layout = wibox.container.margin,
+            top = 10,
+            bottom = 20,
+            {
+                markup = "<b>System Stats</b>",
+                align = "center",
+                widget = wibox.widget.textbox(),
+            }
+        },
+        {
+            align = "center",
+            widget = popup.uptime_widget.textbox,
+        },
+    })
+end
 
 function popup:on_open()
     self:update_uptime()
@@ -44,23 +64,5 @@ function popup:update_uptime()
     
     self.uptime_widget:set_value(uptime_seconds)
 end
-
-popup:setup({
-    layout = wibox.layout.fixed.vertical,
-    {
-        layout = wibox.container.margin,
-        top = 10,
-        bottom = 20,
-        {
-            markup = "<b>System Stats</b>",
-            align = "center",
-            widget = wibox.widget.textbox(),
-        }
-    },
-    {
-        align = "center",
-        widget = popup.uptime_widget.textbox,
-    },
-})
 
 return popup
