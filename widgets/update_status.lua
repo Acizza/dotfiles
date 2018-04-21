@@ -50,11 +50,6 @@ local value_monitor = ValueMonitor:new {
     end,
 }
 
-update_status.widget = wibox.widget {
-    layout = wibox.layout.fixed.horizontal,
-    value_monitor.textbox,
-}
-
 -- Update the widget now in case there's a connection problem when initially syncing
 value_monitor:set_value(MonitorState.UpToDate)
 
@@ -111,5 +106,13 @@ if not config.dev_environment then
         end
     }
 end
+
+update_status.widget = wibox.widget {
+    layout = wibox.layout.fixed.horizontal,
+    buttons = gears.table.join(
+        awful.button({}, 1, update_status.update)
+    ),
+    value_monitor.textbox,
+}
 
 return update_status

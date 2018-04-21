@@ -127,13 +127,7 @@ do
                 layout = wibox.layout.fixed.horizontal,
                 buttons = scroll_tags_buttons,
                 separator.left,
-                {
-                    layout = wibox.layout.fixed.horizontal,
-                    buttons = gears.table.join(
-                        awful.button({}, 1, update_status.update)
-                    ),
-                    update_status.widget
-                },
+                update_status.widget,
                 separator.middle,
                 disk_usage.widget,
                 separator.middle,
