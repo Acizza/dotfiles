@@ -3,7 +3,7 @@ local volume_widget = {}
 local awful = require("awful")
 local config = require("config")
 local wibox = require("wibox")
-local widget = require("widgets/widget")
+local widget = require("widget/value_monitor")
 
 volume_widget.update_time_secs = 15
 volume_widget.muted_color = "#ffe100"

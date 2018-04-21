@@ -2,7 +2,7 @@ local cpu_usage = {}
 
 local awful = require("awful")
 local wibox = require("wibox")
-local widget = require("widgets/widget")
+local widget = require("widget/value_monitor")
 
 cpu_usage.update_time_secs = 1.5
 

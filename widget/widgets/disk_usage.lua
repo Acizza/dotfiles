@@ -2,7 +2,7 @@ local disk_usage = {}
 
 local awful = require("awful")
 local wibox = require("wibox")
-local widget = require("widgets/widget")
+local widget = require("widget/value_monitor")
 
 disk_usage.partitions = { "/", "/home" }
 disk_usage.update_time_secs = 30

@@ -19,12 +19,12 @@ local run_dialog = require("run_dialog")
 local shutdown_menu = require("module/system/shutdown_menu")
 local volume_module = require("module/volume")
 
-local separator = require("widgets/separator")
-local update_status = require("widgets/update_status")
-local disk_usage = require("widgets/disk_usage")
-local ram = require("widgets/ram")
-local cpu_usage = require("widgets/cpu_usage")
-local volume_widget = require("widgets/volume")
+local separator = require("widget/widgets/separator")
+local update_status = require("widget/widgets/update_status")
+local disk_usage = require("widget/widgets/disk_usage")
+local ram = require("widget/widgets/ram")
+local cpu_usage = require("widget/widgets/cpu_usage")
+local volume_widget = require("widget/widgets/volume")
 
 if awesome.startup_errors then
     naughty.notify({
