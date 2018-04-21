@@ -30,4 +30,10 @@ function WidgetPopup:toggle()
     awful.placement.no_offscreen(self.wibar)
 
     self.wibar.visible = not self.wibar.visible
+
+    if self.wibar.visible then
+        self:on_open()
+    else
+        self:on_close()
+    end
 end
