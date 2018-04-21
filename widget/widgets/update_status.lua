@@ -9,6 +9,8 @@ local wibox = require("wibox")
 local widget = require("widget/value_monitor")
 local util = require("util")
 
+require("widget/popup")
+
 local string_match = string.match
 
 update_status.startup_delay_secs = 10
@@ -50,6 +52,25 @@ local value_monitor = ValueMonitor:new {
     end,
 }
 
+local popup = WidgetPopup:new({
+    width = 325,
+    height = 200,
+})
+
+popup:setup({
+    layout = wibox.layout.align.vertical,
+    {
+        layout = wibox.container.margin,
+        top = 10,
+        bottom = 20,
+        {
+            markup = "<b>System Stats</b>",
+            align = "center",
+            widget = wibox.widget.textbox(),
+        }
+    }
+})
+
 -- Update the widget now in case there's a connection problem when initially syncing
 value_monitor:set_value(MonitorState.UpToDate)
 
@@ -89,6 +110,15 @@ function update_status.update()
     end)
 end
 
+update_status.widget = wibox.widget {
+    layout = wibox.layout.fixed.horizontal,
+    buttons = gears.table.join(
+        awful.button({}, 1, function() popup:toggle() end),
+        awful.button({}, 3, update_status.update)
+    ),
+    value_monitor.textbox,
+}
+
 if not config.dev_environment then
     -- Create an initial delay to allow an internet connection to be established
     gears.timer {
@@ -106,13 +136,5 @@ if not config.dev_environment then
         end
     }
 end
-
-update_status.widget = wibox.widget {
-    layout = wibox.layout.fixed.horizontal,
-    buttons = gears.table.join(
-        awful.button({}, 1, update_status.update)
-    ),
-    value_monitor.textbox,
-}
 
 return update_status
