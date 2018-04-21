@@ -9,7 +9,7 @@ local wibox = require("wibox")
 local widget = require("widget/value_monitor")
 local util = require("util")
 
-require("widget/popup")
+local popup = require("widget/widgets/update_status/popup")
 
 local string_match = string.match
 
@@ -51,25 +51,6 @@ local value_monitor = ValueMonitor:new {
         return true
     end,
 }
-
-local popup = WidgetPopup:new({
-    width = 325,
-    height = 200,
-})
-
-popup:setup({
-    layout = wibox.layout.align.vertical,
-    {
-        layout = wibox.container.margin,
-        top = 10,
-        bottom = 20,
-        {
-            markup = "<b>System Stats</b>",
-            align = "center",
-            widget = wibox.widget.textbox(),
-        }
-    }
-})
 
 -- Update the widget now in case there's a connection problem when initially syncing
 value_monitor:set_value(MonitorState.UpToDate)
