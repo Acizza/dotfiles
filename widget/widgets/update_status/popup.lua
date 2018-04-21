@@ -8,11 +8,17 @@ local os_date = os.date
 local io_open = io.open
 
 local popup = WidgetPopup:new {
-    width = 325,
+    width = 300,
     height = 200,
 }
 
-local uptime_widget = ValueMonitor:new {
+popup.uptime_timer = gears.timer {
+    timeout = 1,
+    autostart = false,
+    callback = function() popup:update_uptime() end,
+}
+
+popup.uptime_widget = ValueMonitor:new {
     label = "Uptime",
     format_value = function(time)
         return os_date("!%H:%M:%S", time)
@@ -20,19 +26,24 @@ local uptime_widget = ValueMonitor:new {
     is_formatted_equal = function() return false end,
 }
 
-gears.timer {
-    timeout = 1,
-    autostart = true,
-    callback = function()
-        local uptime_file = io_open("/proc/uptime")
-        local uptime_contents = uptime_file:read()
-        uptime_file:close()
+function popup:on_open()
+    self:update_uptime()
+    self.uptime_timer:again()
+end
 
-        local uptime_seconds = uptime_contents:sub(1, uptime_contents:find(' '))
-        
-        uptime_widget:set_value(uptime_seconds)
-    end,
-}
+function popup:on_close()
+    self.uptime_timer:stop()
+end
+
+function popup:update_uptime()
+    local uptime_file = io_open("/proc/uptime")
+    local uptime_contents = uptime_file:read()
+    uptime_file:close()
+
+    local uptime_seconds = uptime_contents:sub(1, uptime_contents:find(' '))
+    
+    self.uptime_widget:set_value(uptime_seconds)
+end
 
 popup:setup({
     layout = wibox.layout.fixed.vertical,
@@ -47,9 +58,8 @@ popup:setup({
         }
     },
     {
-        layout = wibox.container.margin,
-        left = 25,
-        uptime_widget.textbox,
+        align = "center",
+        widget = popup.uptime_widget.textbox,
     },
 })
 
