@@ -15,6 +15,7 @@ function WidgetPopup:new(options)
 
     local widget_popup = {
         wibar = wibar,
+        initialized = false,
     }
 
     setmetatable(widget_popup, WidgetPopup)
@@ -25,7 +26,20 @@ function WidgetPopup:setup(...)
     self.wibar:setup(...)
 end
 
+function WidgetPopup:on_open()
+
+end
+
+function WidgetPopup:on_close()
+
+end
+
 function WidgetPopup:toggle()
+    if not self.initialized then
+        self:initialize()
+        self.initialized = true
+    end
+
     awful.placement.under_mouse(self.wibar)
     awful.placement.no_offscreen(self.wibar)
 
