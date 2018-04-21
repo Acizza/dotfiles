@@ -59,6 +59,8 @@ awful.layout.layouts = {
     awful.layout.suit.floating,
 }
 
+root.keys(key_bindings.global)
+
 screen.connect_signal("property::geometry", function(screen)
     util.set_wallpaper(screen, config.wallpaper)
 end)
@@ -156,8 +158,6 @@ do
         }
     end)
 end
-
-root.keys(key_bindings.global)
 
 awful.rules.rules = {
     { -- Rules for all clients

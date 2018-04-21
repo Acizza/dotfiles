@@ -6,7 +6,6 @@ local gears = require("gears")
 
 local run_dialog = require("run_dialog")
 local shutdown_menu = require("module/system/shutdown_menu")
-local volume_module = require("module/volume")
 
 key_bindings.global = gears.table.join(
     -- Open the shutdown menu
@@ -38,13 +37,7 @@ key_bindings.global = gears.table.join(
     -- Go to previous window layout
     awful.key({ config.modkey, "Shift" }, "space", function() awful.layout.inc(-1) end),
     -- Open run dialog
-    awful.key({ config.modkey }, "d", run_dialog.open),
-    -- Raise volume
-    awful.key({}, "XF86AudioRaiseVolume", volume_module.increment_source),
-    -- Lower volume
-    awful.key({}, "XF86AudioLowerVolume", volume_module.decrement_source),
-    -- Toggle volume mute
-    awful.key({}, "XF86AudioMute", volume_module.toggle_source_mute)
+    awful.key({ config.modkey }, "d", run_dialog.open)
 )
 
 -- Add key_bindings for each tag
@@ -125,5 +118,9 @@ key_bindings.client = {
         awful.button({ config.modkey }, 3, awful.mouse.client.resize)
     )
 }
+
+function key_bindings.add_global_keys(...)
+    key_bindings.global = gears.table.join(key_bindings.global, ...)
+end
 
 return key_bindings

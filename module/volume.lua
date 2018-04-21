@@ -2,6 +2,8 @@ local volume = {}
 
 local awful = require("awful")
 local config = require("config")
+local gears = require("gears")
+local key_bindings = require("key_bindings")
 local volume_widget = require("widgets/volume")
 
 local table_pack = table.pack
@@ -26,5 +28,14 @@ end
 function volume.toggle_source_mute()
     set_volume("toggle")
 end
+
+key_bindings.add_global_keys(
+    -- Raise volume
+    awful.key({}, "XF86AudioRaiseVolume", volume.increment_source),
+    -- Lower volume
+    awful.key({}, "XF86AudioLowerVolume", volume.decrement_source),
+    -- Toggle volume mute
+    awful.key({}, "XF86AudioMute", volume.toggle_source_mute)
+)
 
 return volume
