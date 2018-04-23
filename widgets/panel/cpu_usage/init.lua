@@ -16,8 +16,17 @@ local string_gmatch = string.gmatch
 
 local monitor_widget = ValueMonitor:new {
     label = "CPU",
-    format_value = function(value)
-        return string_format("%.01f%%", value)
+    format_value = function(usage_pcnt)
+        return string_format("%.01f%%", usage_pcnt)
+    end,
+    updated_value = function(values, usage_pcnt)
+        if usage_pcnt >= 90 then
+            values.value_color = "#fc2828"
+        elseif usage_pcnt >= 75 then
+            values.value_color = "#ffe100"
+        end
+
+        return true
     end,
 }
 
