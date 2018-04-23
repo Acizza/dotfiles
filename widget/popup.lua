@@ -1,6 +1,10 @@
+local popup = {}
+
 local awful = require("awful")
 local config = require("config")
 local gears = require("gears")
+
+popup.open_popup = nil
 
 WidgetPopup = {}
 WidgetPopup.__index = WidgetPopup
@@ -36,28 +40,51 @@ function WidgetPopup:on_close()
 
 end
 
-function WidgetPopup:toggle()
+function WidgetPopup:open()
+    if self.wibar.visible then return end
+
+    if popup.open_popup ~= nil then
+        popup.open_popup:close()
+    end
+
+    popup.open_popup = self
+    
     if not self.initialized then
         self:initialize()
         self.initialized = true
     end
 
-    self.wibar.visible = not self.wibar.visible
+    self.wibar.visible = true
 
+    awful.placement.under_mouse(self.wibar)
+    awful.placement.no_offscreen(self.wibar)
+
+    -- Prevent the wibar from moving other open windows out of the way
+    self.wibar:struts({
+        left = 0,
+        right = 0,
+        top = 0,
+        bottom = 0,
+    })
+
+    self:on_open()
+end
+
+function WidgetPopup:close()
+    if not self.wibar.visible then return end
+
+    self.wibar.visible = false
+    self:on_close()
+
+    popup.open_popup = nil
+end
+
+function WidgetPopup:toggle()
     if self.wibar.visible then
-        awful.placement.under_mouse(self.wibar)
-        awful.placement.no_offscreen(self.wibar)
-
-        -- Prevent the wibar from moving other open windows out of the way
-        self.wibar:struts({
-            left = 0,
-            right = 0,
-            top = 0,
-            bottom = 0,
-        })
-
-        self:on_open()
+        self:close()
     else
-        self:on_close()
+        self:open()
     end
 end
+
+return popup
