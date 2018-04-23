@@ -1,3 +1,4 @@
+local awful = require("awful")
 local wibox = require("wibox")
 local gears = require("gears")
 
@@ -27,8 +28,14 @@ function popup:initialize()
         is_formatted_equal = function() return false end,
     }
 
+    self.kernel_widget = ValueMonitor:new {
+        label = "Kernel",
+    }
+
+    self:update_kernel_version()
+
     self:setup({
-        layout = wibox.layout.fixed.vertical,
+        layout = wibox.layout.flex.vertical,
         {
             layout = wibox.container.margin,
             top = 10,
@@ -41,7 +48,11 @@ function popup:initialize()
         },
         {
             align = "center",
-            widget = popup.uptime_widget.textbox,
+            widget = self.uptime_widget.textbox,
+        },
+        {
+            align = "center",
+            widget = self.kernel_widget.textbox,
         },
     })
 end
@@ -63,6 +74,12 @@ function popup:update_uptime()
     local uptime_seconds = uptime_contents:sub(1, uptime_contents:find(' '))
     
     self.uptime_widget:set_value(uptime_seconds)
+end
+
+function popup:update_kernel_version()
+    awful.spawn.easy_async("uname -r", function(stdout)
+        self.kernel_widget:set_value(stdout)
+    end)
 end
 
 return popup
