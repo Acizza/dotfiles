@@ -1,6 +1,7 @@
 local cpu_usage = {}
 
 local awful = require("awful")
+local beautiful = require("beautiful")
 local gears = require("gears")
 local wibox = require("wibox")
 local widget = require("widgets/value_monitor")
@@ -21,9 +22,9 @@ local monitor_widget = ValueMonitor:new {
     end,
     updated_value = function(values, usage_pcnt)
         if usage_pcnt >= 90 then
-            values.value_color = "#fc2828"
+            values.value_color = beautiful.critical_color
         elseif usage_pcnt >= 75 then
-            values.value_color = "#ffe100"
+            values.value_color = beautiful.warning_color
         end
 
         return true

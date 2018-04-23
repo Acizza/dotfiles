@@ -1,12 +1,12 @@
 local volume_widget = {}
 
 local awful = require("awful")
+local beautiful = require("beautiful")
 local config = require("config")
 local wibox = require("wibox")
 local widget = require("widgets/value_monitor")
 
 volume_widget.update_time_secs = 15
-volume_widget.muted_color = "#ffe100"
 
 local string_match = string.match
 local string_format = string.format
@@ -29,8 +29,8 @@ local monitor_widget = ValueMonitor:new {
                             status.muted ~= last_status.muted
 
         if has_changed and status.muted then
-            values.label_color = volume_widget.muted_color
-            values.value_color = volume_widget.muted_color
+            values.label_color = beautiful.warning_color
+            values.value_color = beautiful.warning_color
         end
 
         return has_changed

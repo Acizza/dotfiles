@@ -34,6 +34,9 @@ theme.border_marked = "#91231c"
 
 theme.titlebar_fg = "#b2b2b2"
 
+theme.warning_color = "#ffe100"
+theme.critical_color = "#fc2828"
+
 -- There are other variable sets
 -- overriding the default one when
 -- defined, the sets are:

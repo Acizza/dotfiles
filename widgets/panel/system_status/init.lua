@@ -1,6 +1,7 @@
 local system_status = {}
 
 local awful = require("awful")
+local beautiful = require("beautiful")
 local config = require("config")
 local gears = require("gears")
 local lfs = require("lfs")
@@ -43,9 +44,9 @@ local value_monitor = ValueMonitor:new {
     format_value = function(data) return data.text end,
     updated_value = function(values, data)
         if data == MonitorState.Error then
-            values.value_color = "#ff0000"
+            values.value_color = beautiful.critical_color
         elseif data.has_newer_date then
-            values.value_color = "#ffe100"
+            values.value_color = beautiful.warning_color
         end
 
         return true
