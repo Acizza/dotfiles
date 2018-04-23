@@ -11,6 +11,8 @@ function WidgetPopup:new(options)
         height = options.height,
         opacity = config.panel_opacity,
         visible = false,
+        ontop = true,
+        type = "popup_menu"
     }
 
     local widget_popup = {
@@ -45,6 +47,14 @@ function WidgetPopup:toggle()
     if self.wibar.visible then
         awful.placement.under_mouse(self.wibar)
         awful.placement.no_offscreen(self.wibar)
+
+        -- Prevent the wibar from moving other open windows out of the way
+        self.wibar:struts({
+            left = 0,
+            right = 0,
+            top = 0,
+            bottom = 0,
+        })
 
         self:on_open()
     else
