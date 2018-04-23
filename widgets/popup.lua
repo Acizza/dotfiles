@@ -34,12 +34,23 @@ function WidgetPopup:setup(...)
     self.wibar:setup(...)
 end
 
+function WidgetPopup:set_position()
+    if self.is_panel_widget then
+        awful.placement.under_mouse(self.wibar)
+        awful.placement.no_offscreen(self.wibar)
+    end
+end
+
 function WidgetPopup:on_open()
 
 end
 
 function WidgetPopup:on_close()
 
+end
+
+function WidgetPopup:is_open()
+    return self.wibar.visible
 end
 
 function WidgetPopup:open()
@@ -57,11 +68,7 @@ function WidgetPopup:open()
     end
 
     self.wibar.visible = true
-
-    if self.is_panel_widget then
-        awful.placement.under_mouse(self.wibar)
-        awful.placement.no_offscreen(self.wibar)
-    end
+    self:set_position()
 
     -- Prevent the wibar from moving other open windows out of the way
     self.wibar:struts({
