@@ -40,12 +40,12 @@ function WidgetPopup:toggle()
         self.initialized = true
     end
 
-    awful.placement.under_mouse(self.wibar)
-    awful.placement.no_offscreen(self.wibar)
-
     self.wibar.visible = not self.wibar.visible
 
     if self.wibar.visible then
+        awful.placement.under_mouse(self.wibar)
+        awful.placement.no_offscreen(self.wibar)
+
         self:on_open()
     else
         self:on_close()
