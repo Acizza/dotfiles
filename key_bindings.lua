@@ -5,11 +5,11 @@ local config = require("config")
 local gears = require("gears")
 
 local run_dialog = require("run_dialog")
-local shutdown_menu = require("module/system/shutdown_menu")
+local shutdown_menu = require("widgets/system/shutdown_menu")
 
 key_bindings.global = gears.table.join(
     -- Open the shutdown menu
-    awful.key({ config.modkey }, "End", shutdown_menu.open),
+    awful.key({ config.modkey }, "End", function() shutdown_menu:open() end),
     -- Shift focus to the right
     awful.key({ config.modkey }, "Right", function() awful.client.focus.byidx(1) end),
     -- Shift focus to left

@@ -16,9 +16,9 @@ local key_bindings = require("key_bindings")
 local util = require("util")
 
 local run_dialog = require("run_dialog")
-local shutdown_menu = require("module/system/shutdown_menu")
 local volume_module = require("module/volume")
 
+local shutdown_menu = require("widgets/system/shutdown_menu")
 local separator = require("widgets/panel/separator")
 local update_status = require("widgets/panel/update_status")
 local disk_usage = require("widgets/panel/disk_usage")
