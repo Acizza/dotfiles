@@ -7,6 +7,7 @@ require("widgets/popup")
 
 local os_date = os.date
 local io_open = io.open
+local string_match = string.match
 
 local popup = WidgetPopup:new {
     width = 300,
@@ -34,6 +35,12 @@ function popup:initialize()
 
     self:update_kernel_version()
 
+    self.graphics_driver_ver_widget = ValueMonitor:new {
+        label = "GPU Driver",
+    }
+
+    self:update_graphics_driver_ver()
+
     self:setup({
         layout = wibox.layout.flex.vertical,
         {
@@ -53,6 +60,10 @@ function popup:initialize()
         {
             align = "center",
             widget = self.kernel_widget.textbox,
+        },
+        {
+            align = "center",
+            widget = self.graphics_driver_ver_widget.textbox,
         },
     })
 end
@@ -79,6 +90,18 @@ end
 function popup:update_kernel_version()
     awful.spawn.easy_async("uname -r", function(stdout)
         self.kernel_widget:set_value(stdout)
+    end)
+end
+
+function popup:update_graphics_driver_ver()
+    awful.spawn.easy_async("modinfo nvidia", function(stdout, _, _, exit_code)
+        if exit_code ~= 0 then
+            self.graphics_driver_ver_widget:set_value("unknown")
+            return
+        end
+
+        local version = string_match(stdout, "version:%s+(.-)\n")
+        self.graphics_driver_ver_widget:set_value(version)
     end)
 end
 
