@@ -1,4 +1,4 @@
-local update_status = {}
+local system_status = {}
 
 local awful = require("awful")
 local config = require("config")
@@ -9,13 +9,13 @@ local wibox = require("wibox")
 local widget = require("widgets/value_monitor")
 local util = require("util")
 
-local popup = require("widgets/panel/update_status/popup")
+local popup = require("widgets/panel/system_status/popup")
 
 local string_match = string.match
 
-update_status.startup_delay_secs = 10
-update_status.update_time_hours = 2
-update_status.update_channel = "nixos-unstable-small"
+system_status.startup_delay_secs = 10
+system_status.update_time_hours = 2
+system_status.update_channel = "nixos-unstable-small"
 
 local MonitorState = {
     OutOfDate = {
@@ -36,7 +36,7 @@ local MonitorState = {
     },
 }
 
-local run_command = "curl -L https://nixos.org/channels/" .. update_status.update_channel
+local run_command = "curl -L https://nixos.org/channels/" .. system_status.update_channel
 
 local value_monitor = ValueMonitor:new {
     label = "SYS",
@@ -83,7 +83,7 @@ local function parse_command_output(stdout, stderr, exit_code)
     end)
 end
 
-function update_status.update()
+function system_status.update()
     value_monitor:set_value(MonitorState.Checking)
 
     awful.spawn.easy_async(run_command, function(stdout, stderr, _, exit_code)
@@ -91,11 +91,11 @@ function update_status.update()
     end)
 end
 
-update_status.widget = wibox.widget {
+system_status.widget = wibox.widget {
     layout = wibox.layout.fixed.horizontal,
     buttons = gears.table.join(
         awful.button({}, 1, function() popup:toggle() end),
-        awful.button({}, 3, update_status.update)
+        awful.button({}, 3, system_status.update)
     ),
     value_monitor.textbox,
 }
@@ -103,19 +103,19 @@ update_status.widget = wibox.widget {
 if not config.dev_environment then
     -- Create an initial delay to allow an internet connection to be established
     gears.timer {
-        timeout = update_status.startup_delay_secs,
+        timeout = system_status.startup_delay_secs,
         autostart = true,
         single_shot = true,
         callback = function()
-            update_status.update()
+            system_status.update()
 
             gears.timer {
-                timeout = update_status.update_time_hours * 3600,
+                timeout = system_status.update_time_hours * 3600,
                 autostart = true,
-                callback = update_status.update,
+                callback = system_status.update,
             }
         end
     }
 end
 
-return update_status
+return system_status
