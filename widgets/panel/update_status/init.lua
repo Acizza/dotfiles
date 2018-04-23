@@ -6,10 +6,10 @@ local gears = require("gears")
 local lfs = require("lfs")
 local naughty = require("naughty")
 local wibox = require("wibox")
-local widget = require("widget/value_monitor")
+local widget = require("widgets/value_monitor")
 local util = require("util")
 
-local popup = require("widget/widgets/update_status/popup")
+local popup = require("widgets/panel/update_status/popup")
 
 local string_match = string.match
 

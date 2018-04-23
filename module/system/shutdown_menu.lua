@@ -4,7 +4,7 @@ local awful = require("awful")
 local cairo = require("lgi").cairo
 local gears = require("gears")
 local wibox = require("wibox")
-local popup = require("widget/popup")
+local popup = require("widgets/popup")
 
 shutdown_menu.width = 300
 shutdown_menu.height = 250

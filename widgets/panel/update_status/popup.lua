@@ -1,8 +1,8 @@
 local wibox = require("wibox")
 local gears = require("gears")
 
-require("widget/value_monitor")
-require("widget/popup")
+require("widgets/value_monitor")
+require("widgets/popup")
 
 local os_date = os.date
 local io_open = io.open

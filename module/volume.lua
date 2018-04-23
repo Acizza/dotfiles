@@ -4,7 +4,7 @@ local awful = require("awful")
 local config = require("config")
 local gears = require("gears")
 local key_bindings = require("key_bindings")
-local volume_widget = require("widget/widgets/volume")
+local volume_widget = require("widgets/panel/volume")
 
 local table_pack = table.pack
 local string_match = string.match
