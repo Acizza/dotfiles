@@ -4,6 +4,7 @@ local awful = require("awful")
 local cairo = require("lgi").cairo
 local gears = require("gears")
 local wibox = require("wibox")
+local popup = require("widget/popup")
 
 shutdown_menu.width = 300
 shutdown_menu.height = 250
@@ -117,6 +118,10 @@ local open = false
 function shutdown_menu.open()
     if open then return end
     open = true
+
+    if popup.open_popup ~= nil then
+        popup.open_popup:close()
+    end
 
     initialize()
 
