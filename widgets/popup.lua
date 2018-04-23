@@ -22,6 +22,8 @@ function WidgetPopup:new(options)
     local widget_popup = {
         wibar = wibar,
         initialized = false,
+        is_panel_widget = options.is_panel_widget == nil
+            and true or options.is_panel_widget,
     }
 
     setmetatable(widget_popup, WidgetPopup)
@@ -56,8 +58,10 @@ function WidgetPopup:open()
 
     self.wibar.visible = true
 
-    awful.placement.under_mouse(self.wibar)
-    awful.placement.no_offscreen(self.wibar)
+    if self.is_panel_widget then
+        awful.placement.under_mouse(self.wibar)
+        awful.placement.no_offscreen(self.wibar)
+    end
 
     -- Prevent the wibar from moving other open windows out of the way
     self.wibar:struts({
