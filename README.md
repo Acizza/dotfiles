@@ -2,7 +2,7 @@ This repository contains my personal [Awesome](https://awesomewm.org/) configura
 
 # Dependencies
 
-If you do want to try this configuration out for whatever reason, the dependencies required are as follows:
+If you'd like to try out this configuration, the dependencies required are as follows:
 
 **Lua:**
 * `luafilesystem`
@@ -10,4 +10,4 @@ If you do want to try this configuration out for whatever reason, the dependenci
 **System:**
 * `systemd`
 
-Note that the systemd requirement can easily be removed, as it is only used for handling system shutdown options in `module/system/shutdown_menu.lua`.
+Note that the systemd requirement can easily be removed, as it is only used for handling system shutdown options in `widgets/system/shutdown_menu.lua`.
