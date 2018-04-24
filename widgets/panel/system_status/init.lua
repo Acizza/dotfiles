@@ -16,7 +16,7 @@ local string_match = string.match
 
 system_status.startup_delay_secs = 10
 system_status.update_time_hours = 2
-system_status.update_channel = "nixos-unstable-small"
+system_status.update_channel = "nixos-unstable"
 
 local MonitorState = {
     OutOfDate = {
