@@ -10,7 +10,6 @@ volume_widget.update_time_secs = 15
 
 local string_match = string.match
 local string_format = string.format
-local table_pack = table.pack
 
 local run_command = "amixer sget " .. config.audio_source
 
@@ -48,7 +47,7 @@ volume_widget.widget = wibox.widget {
 }
 
 local function update_from_output(stdout)
-    local volume_info = table_pack(string_match(stdout, "%[(%d+)%%%] %[(%a+)%]"))
+    local volume_info = { string_match(stdout, "%[(%d+)%%%] %[(%a+)%]") }
 
     local status = {
         volume = volume_info[1],

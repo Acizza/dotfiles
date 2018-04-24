@@ -10,7 +10,6 @@ disk_usage.space_between_partitions = 20
 
 local string_format = string.format
 local string_match = string.match
-local table_pack = table.pack
 
 local run_command = "df -k " .. table.concat(disk_usage.partitions, " ")
 local partition_data = {}
@@ -60,8 +59,9 @@ end
 
 awful.widget.watch(run_command, disk_usage.update_time_secs, function(widget, stdout)
     for _,data in pairs(partition_data) do
-        local usage_info = table_pack(
-            string_match(stdout, "%d+%s-(%d+)%s-%d+%%%s-" .. data.partition .. "\n"))
+        local usage_info = {
+            string_match(stdout, "%d+%s-(%d+)%s-%d+%%%s-" .. data.partition .. "\n")
+        }
 
         local available_kb = usage_info[1]
         data.monitor_widget:set_value(available_kb)
