@@ -53,7 +53,7 @@ config.floating_windows = {
 config.startup_programs = {
     "numlockx",
     "ibus-daemon -d",
-    "sh -c 'sleep 10; exec ~/projects/rust/bcnotif/target/release/bcnotif'"
+    "sh -c 'sleep 10; exec bcnotif'"
 }
 
 config.audio_source = "Master"
