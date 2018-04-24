@@ -40,7 +40,11 @@ cpu_usage.widget = wibox.widget {
 }
 
 awful.widget.watch("cat /proc/stat", cpu_usage.update_time_secs, function(_, stdout)
-    local jiffies = string_gmatch(string_match(stdout, "cpu (.-)\n"), "%d+")
+    local jiffies = {
+        string_match(stdout,
+            "cpu  (%d-) (%d-) (%d-) (%d-) (%d-) (%d-) (%d-) (%d-) (%d-) (%d-)\n")
+    }
+
     local usage_pcnt = usage.calculate_core_usage(0, jiffies)
 
     monitor_widget:set_value(usage_pcnt)

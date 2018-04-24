@@ -8,7 +8,7 @@ local wibox = require("wibox")
 local usage = require("widgets/panel/cpu_usage/usage")
 
 local string_format = string.format
-local string_gmatch = string.gmatch
+local string_match = string.match
 
 local popup = WidgetPopup:new {
     width = 200,
@@ -17,11 +17,15 @@ local popup = WidgetPopup:new {
 
 popup.usage_monitors = {}
 
+local total_cores = 0
+
 function popup:initialize()
     awful.spawn.easy_async("nproc", function(num_cores)
         -- TODO: don't use magic numbers
         self.wibar.height = 60 + (beautiful.get_font_height(beautiful.font) + 2.5) * num_cores
         self:set_position()
+
+        total_cores = num_cores
 
         local cpu_usage_widgets = {}
 
@@ -58,13 +62,14 @@ function popup:initialize()
 end
 
 function popup:update_usages(stat_output)
-    local cpu_lines = string_gmatch(stat_output, "cpu(%d+)%s(.-)\n")
+    for core = 1, total_cores do
+        local jiffies = {
+            string_match(stat_output,
+                "cpu" .. core - 1 .. " (%d-) (%d-) (%d-) (%d-) (%d-) (%d-) (%d-) (%d-) (%d-) (%d-)\n")
+        }
 
-    for core_num,cpu_line in cpu_lines do
-        local jiffies = string_gmatch(cpu_line, "%d+")
-        local usage_pcnt = usage.calculate_core_usage(core_num, jiffies)
-
-        self.usage_monitors[1 + core_num]:set_value(usage_pcnt)
+        local usage_pcnt = usage.calculate_core_usage(core, jiffies)
+        self.usage_monitors[core]:set_value(usage_pcnt)
     end
 end
 

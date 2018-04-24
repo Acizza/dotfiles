@@ -16,7 +16,9 @@ function usage.calculate_core_usage(core_num, jiffies)
 
     local index = 1
     
-    for jiffie in jiffies do
+    for i = 1, #jiffies do
+        local jiffie = jiffies[i]
+        
         state.total_jiffies = state.total_jiffies + jiffie
 
         if index <= 3 then
