@@ -41,11 +41,17 @@ function popup:initialize()
 
     self:update_graphics_driver_ver()
 
+    self.lua_runtime_widget = ValueMonitor:new {
+        label = "Runtime",
+    }
+
+    self:update_lua_runtime()
+
     self:setup({
-        layout = wibox.layout.flex.vertical,
+        layout = wibox.layout.fixed.vertical,
         {
             layout = wibox.container.margin,
-            top = 10,
+            top = 20,
             bottom = 20,
             {
                 markup = "<b>System Stats</b>",
@@ -65,6 +71,10 @@ function popup:initialize()
             align = "center",
             widget = self.graphics_driver_ver_widget.textbox,
         },
+        {
+            align = "center",
+            widget = self.lua_runtime_widget.textbox,
+        }
     })
 end
 
@@ -89,7 +99,7 @@ end
 
 function popup:update_kernel_version()
     awful.spawn.easy_async("uname -r", function(stdout)
-        self.kernel_widget:set_value(stdout)
+        self.kernel_widget:set_value(stdout:sub(1, #stdout - 1))
     end)
 end
 
@@ -103,6 +113,21 @@ function popup:update_graphics_driver_ver()
         local version = string_match(stdout, "version:%s+(.-)\n")
         self.graphics_driver_ver_widget:set_value(version)
     end)
+end
+
+function popup:update_lua_runtime()
+    if type(jit) == "table" then
+        local version = jit.version
+        local extra_tag_pos = version:find('-')
+
+        if extra_tag_pos ~= nil then
+            version = version:sub(1, extra_tag_pos - 1)
+        end
+
+        self.lua_runtime_widget:set_value(version)
+    else
+        self.lua_runtime_widget:set_value(_VERSION)
+    end
 end
 
 return popup
