@@ -199,6 +199,15 @@ awful.rules.rules = {
     },
 }
 
+client.connect_signal("property::class", function(c)
+    -- Spotify initializes with a different class, so we cannot use client rules to
+    -- move it to its own tag
+    if c.class == "Spotify" then
+        local tag = awful.tag.find_by_name(awful.screen.focused(), "spotify")
+        c:move_to_tag(tag)
+    end
+end)
+
 client.connect_signal("manage", function(c)
     if awesome.startup and
       not c.size_hints.user_position

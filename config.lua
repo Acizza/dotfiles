@@ -37,9 +37,14 @@ config.program_shortcuts = {
         key = "Next",
         exec = "gnome-system-monitor"
     },
+    {
+        modifier = { config.modkey },
+        key = "bracketleft",
+        exec = "spotify --force-device-scale-factor=2"
+    },
 }
 
-config.tags = { "web", "dev", "term", "steam", "misc" }
+config.tags = { "web", "dev", "term", "spotify", "steam", "misc" }
 
 config.clock_format = "%a %b %d, %H:%M:%S"
 config.panel_opacity = 0.8
