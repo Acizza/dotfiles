@@ -12,6 +12,8 @@ local spotify_popup = WidgetPopup:new {
     height = 256,
 }
 
+spotify_popup.update_time_secs = 5
+
 function spotify_popup:initialize_paths()
     self.album_cover_cache = gears.filesystem.get_cache_dir() .. "spotify/"
     lfs.mkdir(self.album_cover_cache)
@@ -19,6 +21,12 @@ end
 
 function spotify_popup:initialize()
     self:initialize_paths()
+
+    self.update_timer = gears.timer {
+        timeout = self.update_time_secs,
+        autostart = false,
+        callback = function() self:update() end,
+    }
 
     self.album_art = wibox.widget.imagebox(nil, true)
 
@@ -104,7 +112,7 @@ local function set_value_escaped(monitor, value)
     monitor:set_value(gears.string.xml_escape(value))
 end
 
-function spotify_popup:on_open()
+function spotify_popup:update()
     awful.spawn.easy_async("sp metadata", function(stdout, _, _, exit_code)
         if exit_code ~= 0 then
             self:set_nothing_playing()
@@ -117,6 +125,15 @@ function spotify_popup:on_open()
 
         spotify_popup:update_album_cover(string_match(stdout, "artUrl|(.-)\n"))
     end)
+end
+
+function spotify_popup:on_open()
+    self:update()
+    self.update_timer:again()
+end
+
+function spotify_popup:on_close()
+    self.update_timer:stop()
 end
 
 return spotify_popup
