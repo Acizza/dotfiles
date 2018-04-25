@@ -3,8 +3,11 @@ local volume_widget = {}
 local awful = require("awful")
 local beautiful = require("beautiful")
 local config = require("config")
+local gears = require("gears")
 local wibox = require("wibox")
 local widget = require("widgets/value_monitor")
+
+local spotify_popup = require("widgets/panel/volume/spotify_popup")
 
 volume_widget.update_time_secs = 15
 
@@ -43,6 +46,9 @@ local monitor_widget = ValueMonitor:new {
 
 volume_widget.widget = wibox.widget {
     layout = wibox.layout.fixed.horizontal,
+    buttons = gears.table.join(
+        awful.button({}, 1, function() spotify_popup:toggle() end)
+    ),
     monitor_widget.textbox,
 }
 
