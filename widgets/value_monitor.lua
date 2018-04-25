@@ -1,5 +1,4 @@
 local beautiful = require("beautiful")
-local gears = require("gears")
 local wibox = require("wibox")
 
 ValueMonitor = {}
@@ -65,7 +64,7 @@ function ValueMonitor:set_value(value)
         values.label_color or self.label_color,
         values.label or self.label,
         values.value_color or self.value_color,
-        gears.string.xml_escape(formatted_value)
+        formatted_value
     )
 
     self.textbox.markup = text
