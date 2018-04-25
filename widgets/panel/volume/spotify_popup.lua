@@ -100,6 +100,10 @@ function spotify_popup:update_album_cover(url)
     end)
 end
 
+local function set_value_escaped(monitor, value)
+    monitor:set_value(gears.string.xml_escape(value))
+end
+
 function spotify_popup:on_open()
     awful.spawn.easy_async("sp metadata", function(stdout, _, _, exit_code)
         if exit_code ~= 0 then
@@ -107,9 +111,9 @@ function spotify_popup:on_open()
             return
         end
 
-        self.song_title:set_value(string_match(stdout, "title|(.-)\n"))
-        self.song_artist:set_value(string_match(stdout, "artist|(.-)\n"))
-        self.song_album:set_value(string_match(stdout, "album|(.-)\n"))
+        set_value_escaped(self.song_title, string_match(stdout, "title|(.-)\n"))
+        set_value_escaped(self.song_artist, string_match(stdout, "artist|(.-)\n"))
+        set_value_escaped(self.song_album, string_match(stdout, "album|(.-)\n"))
 
         spotify_popup:update_album_cover(string_match(stdout, "artUrl|(.-)\n"))
     end)
