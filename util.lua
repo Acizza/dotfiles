@@ -2,6 +2,10 @@ local util = {}
 
 local lfs = require("lfs")
 local gears = require("gears")
+local naughty = require("naughty")
+
+local io_open = io.open
+local math_random = math.random
 
 function util.read_dir(dir)
     local files = {}
@@ -33,7 +37,31 @@ function util.random_file_in_dir(dir)
         return
     end
 
-    return files[math.random(1, #files)]
+    return files[math_random(1, #files)]
+end
+
+function util.write_file(path, text)
+    local file = io_open(path, "w")
+    
+    if file == nil then
+        return false
+    end
+
+    local contents = file:write(text)
+    file:close()
+
+    return true
+end
+
+function util.file_exists(path)
+    local file = io_open(path, "r")
+
+    if file ~= nil then
+        file:close()
+        return true
+    else
+        return false
+    end
 end
 
 -- Call with nil to apply the wallpaper to all screens.
