@@ -1,16 +1,15 @@
 local separator = {}
 
+local config = require("config")
 local wibox = require("wibox")
 
-separator.left_text = "[ "
-separator.middle_text = " ][ "
-separator.right_text = " ]"
+local widget_config = config.widgets.separator
 
 separator.left = wibox.widget {
     layout = wibox.layout.fixed.horizontal,
     {
         widget = wibox.widget.textbox,
-        text = separator.left_text,
+        text = widget_config.left_text,
         font = "10",
     }
 }
@@ -19,7 +18,7 @@ separator.middle = wibox.widget {
     layout = wibox.layout.fixed.horizontal,
     {
         widget = wibox.widget.textbox,
-        text = separator.middle_text,
+        text = widget_config.middle_text,
         font = "10",
     },
 }
@@ -28,7 +27,7 @@ separator.right = wibox.widget {
     layout = wibox.layout.fixed.horizontal,
     {
         widget = wibox.widget.textbox,
-        text = separator.right_text,
+        text = widget_config.right_text,
         font = "10",
     },
 }

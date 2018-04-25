@@ -2,6 +2,7 @@ local cpu_usage = {}
 
 local awful = require("awful")
 local beautiful = require("beautiful")
+local config = require("config")
 local gears = require("gears")
 local wibox = require("wibox")
 local widget = require("widgets/value_monitor")
@@ -9,7 +10,7 @@ local widget = require("widgets/value_monitor")
 local usage = require("widgets/panel/cpu_usage/usage")
 local popup = require("widgets/panel/cpu_usage/popup")
 
-cpu_usage.update_time_secs = 1.5
+local widget_config = config.widgets.cpu_usage
 
 local string_format = string.format
 local string_match = string.match
@@ -39,7 +40,7 @@ cpu_usage.widget = wibox.widget {
     monitor_widget.textbox,
 }
 
-awful.widget.watch("cat /proc/stat", cpu_usage.update_time_secs, function(_, stdout)
+awful.widget.watch("cat /proc/stat", widget_config.update_time_secs, function(_, stdout)
     local jiffies = {
         string_match(stdout,
             "cpu  (%d-) (%d-) (%d-) (%d-) (%d-) (%d-) (%d-) (%d-) (%d-) (%d-)\n")

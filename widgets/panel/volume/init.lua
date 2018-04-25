@@ -9,7 +9,7 @@ local widget = require("widgets/value_monitor")
 
 local spotify_popup = require("widgets/panel/volume/spotify_popup")
 
-volume_widget.update_time_secs = 15
+local widget_config = config.widgets.volume
 
 local string_match = string.match
 local string_format = string.format
@@ -67,7 +67,7 @@ function volume_widget.update()
     awful.spawn.easy_async(run_command, update_from_output)
 end
 
-awful.widget.watch(run_command, volume_widget.update_time_secs, function(_, stdout)
+awful.widget.watch(run_command, widget_config.update_time_secs, function(_, stdout)
     update_from_output(stdout)
 end)
 

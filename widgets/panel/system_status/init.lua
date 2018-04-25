@@ -14,9 +14,7 @@ local popup = require("widgets/panel/system_status/popup")
 
 local string_match = string.match
 
-system_status.startup_delay_secs = 10
-system_status.update_time_hours = 2
-system_status.update_channel = "nixos-unstable"
+local widget_config = config.widgets.system_status
 
 local MonitorState = {
     OutOfDate = {
@@ -37,7 +35,7 @@ local MonitorState = {
     },
 }
 
-local run_command = "curl -L https://nixos.org/channels/" .. system_status.update_channel
+local run_command = "curl -L https://nixos.org/channels/" .. widget_config.update_channel
 
 local value_monitor = ValueMonitor:new {
     label = "SYS",
@@ -104,14 +102,14 @@ system_status.widget = wibox.widget {
 if not config.dev_environment then
     -- Create an initial delay to allow an internet connection to be established
     gears.timer {
-        timeout = system_status.startup_delay_secs,
+        timeout = widget_config.startup_delay_secs,
         autostart = true,
         single_shot = true,
         callback = function()
             system_status.update()
 
             gears.timer {
-                timeout = system_status.update_time_hours * 3600,
+                timeout = widget_config.update_time_hours * 3600,
                 autostart = true,
                 callback = system_status.update,
             }

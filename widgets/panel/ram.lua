@@ -1,10 +1,11 @@
 local ram = {}
 
 local awful = require("awful")
+local config = require("config")
 local wibox = require("wibox")
 local widget = require("widgets/value_monitor")
 
-ram.update_time_secs = 1.5
+local widget_config = config.widgets.ram
 
 local math_max = math.max
 local string_match = string.match
@@ -25,7 +26,7 @@ ram.widget = wibox.widget {
     monitor_widget.textbox,
 }
 
-awful.widget.watch("free", ram.update_time_secs, function(widget, stdout)
+awful.widget.watch("free", widget_config.update_time_secs, function(widget, stdout)
     -- This pattern grabs the "total" and "available" fields
     local ram_info = { string_match(stdout, "Mem:%s-(%d+).-(%d+)\n") }
     ram_info.total = ram_info[1]

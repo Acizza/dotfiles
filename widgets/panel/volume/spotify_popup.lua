@@ -1,4 +1,5 @@
 local awful = require("awful")
+local config = require("config")
 local gears = require("gears")
 local lfs = require("lfs")
 local wibox = require("wibox")
@@ -12,7 +13,7 @@ local spotify_popup = WidgetPopup:new {
     height = 256,
 }
 
-spotify_popup.update_time_secs = 5
+local widget_config = config.widgets.volume
 
 function spotify_popup:initialize_paths()
     self.album_cover_cache = gears.filesystem.get_cache_dir() .. "spotify/"
@@ -23,7 +24,7 @@ function spotify_popup:initialize()
     self:initialize_paths()
 
     self.update_timer = gears.timer {
-        timeout = self.update_time_secs,
+        timeout = widget_config.spotify_update_time_secs,
         autostart = false,
         callback = function() self:update() end,
     }

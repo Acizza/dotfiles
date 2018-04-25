@@ -1,20 +1,19 @@
 local disk_usage = {}
 
 local awful = require("awful")
+local config = require("config")
 local wibox = require("wibox")
 local widget = require("widgets/value_monitor")
 
-disk_usage.partitions = { "/", "/home" }
-disk_usage.update_time_secs = 30
-disk_usage.space_between_partitions = 20
+local widget_config = config.widgets.disk_usage
 
 local string_format = string.format
 local string_match = string.match
 
-local run_command = "df -k " .. table.concat(disk_usage.partitions, " ")
+local run_command = "df -k " .. table.concat(widget_config.partitions, " ")
 local partition_data = {}
 
-for _,partition in pairs(disk_usage.partitions) do
+for _,partition in pairs(widget_config.partitions) do
     partition_data[#partition_data + 1] = {
         partition = partition,
         monitor_widget = ValueMonitor:new {
@@ -37,7 +36,7 @@ do
         if not is_first_index then
             widget = {
                 widget = wibox.container.margin,
-                left = disk_usage.space_between_partitions,
+                left = widget_config.space_between_partitions,
                 {
                     layout = wibox.layout.fixed.horizontal,
                     data.monitor_widget.textbox,
@@ -57,7 +56,7 @@ do
     }
 end
 
-awful.widget.watch(run_command, disk_usage.update_time_secs, function(widget, stdout)
+awful.widget.watch(run_command, widget_config.update_time_secs, function(widget, stdout)
     for _,data in pairs(partition_data) do
         local usage_info = {
             string_match(stdout, "%d+%s-(%d+)%s-%d+%%%s-" .. data.partition .. "\n")
