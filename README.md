@@ -9,5 +9,6 @@ If you'd like to try out this configuration, the dependencies required are as fo
 
 **System:**
 * `systemd`
+* `sp` (used for Spotify info, and can be obtained from [here](https://gist.github.com/wandernauta/6800547))
 
 Note that the systemd requirement can easily be removed, as it is only used for handling system shutdown options in `widgets/system/shutdown_menu.lua`.
