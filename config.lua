@@ -57,6 +57,7 @@ config.floating_windows = {
 
 config.startup_programs = {
     "numlockx",
+    "nm-applet",
     "ibus-daemon -d",
     "sh -c 'sleep 10; exec bcnotif'"
 }
