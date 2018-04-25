@@ -183,16 +183,12 @@ awful.rules.rules = {
         },
         properties = {
             tag = "steam",
-            border_width = 0,
             floating = true,
         }
     },
     { -- Add titlebars to normal clients and dialogs
         rule_any = {
             type = { "normal", "dialog" }
-        },
-        except = {
-            instance = "Steam"
         },
         properties = {
             titlebars_enabled = true
