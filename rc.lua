@@ -125,7 +125,6 @@ do
             },
             { -- Right widgets
                 layout = wibox.layout.fixed.horizontal,
-                buttons = scroll_tags_buttons,
                 separator.left,
                 system_status.widget,
                 separator.middle,
