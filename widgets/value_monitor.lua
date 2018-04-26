@@ -34,9 +34,6 @@ function ValueMonitor:new(values)
         label_color = values.label_color or beautiful.widget_label,
         value_color = values.value_color or beautiful.fg_normal,
         textbox = values.textbox or wibox.widget.textbox(),
-        updated_value = values.updated_value or function() return true end,
-        format_value = values.format_value or function(v) return v end,
-        is_formatted_equal = values.is_formatted_equal or function(value, last) return value == last end,
         last_value = values.last_value or nil,
         last_formatted_value = values.last_formatted_value or nil,
     }
@@ -50,20 +47,20 @@ end
 -- The contained textbox's markup will not be updated if the provided
 -- value hasn't changed, as updating a textbox's markup is expensive.
 function ValueMonitor:set_value(value)
-    -- Values that can be used for this iteration only
-    local values = {}
+    local update_info = self:on_set(value)
+    if update_info.halt then return end
 
-    local perform_update = self.updated_value(values, value, self.last_value)
-    if not perform_update then return end
+    local formatted_value = update_info.formatted or value
 
-    local formatted_value = self.format_value(value)
-    if self.is_formatted_equal(formatted_value, self.last_formatted_value) then return end
+    if self:is_formatted_equal(formatted_value) then
+        return
+    end
 
     local text = string_format(
         "<span color=\"%s\">%s</span> <span color=\"%s\">%s</span>",
-        values.label_color or self.label_color,
-        values.label or self.label,
-        values.value_color or self.value_color,
+        update_info.label_color or self.label_color,
+        update_info.label or self.label,
+        update_info.value_color or self.value_color,
         formatted_value
     )
 
@@ -71,4 +68,12 @@ function ValueMonitor:set_value(value)
 
     self.last_value = value
     self.last_formatted_value = formatted_value
+end
+
+function ValueMonitor:on_set()
+    return {}
+end
+
+function ValueMonitor:is_formatted_equal(value)
+    return value == self.last_formatted_value
 end

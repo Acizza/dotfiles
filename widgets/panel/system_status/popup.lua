@@ -22,12 +22,12 @@ function popup:initialize()
     }
     
     self.uptime_widget = ValueMonitor:new {
-        label = "Uptime",
-        format_value = function(time)
-            return os_date("!%H:%M:%S", time)
-        end,
-        is_formatted_equal = function() return false end,
+        label = "Uptime"
     }
+
+    self.uptime_widget.on_set = function(_, time)
+        return { formatted = os_date("!%H:%M:%S", time) }
+    end
 
     self.kernel_widget = ValueMonitor:new {
         label = "Kernel",

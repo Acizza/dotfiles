@@ -44,18 +44,22 @@ end)
 local channel_path = os.getenv("HOME") .. "/.nix-defexpr/channels_root/nixos/"
 
 local value_monitor = ValueMonitor:new {
-    label = "SYS",
-    format_value = function(data) return data.text end,
-    updated_value = function(values, data)
-        if data == MonitorState.Error then
-            values.value_color = beautiful.critical_color
-        elseif data.has_newer_date then
-            values.value_color = beautiful.warning_color
-        end
-
-        return true
-    end,
+    label = "SYS"
 }
+
+function value_monitor:on_set(data)
+    local values = {
+        formatted = data.text
+    }
+
+    if data == MonitorState.Error then
+        values.value_color = beautiful.critical_color
+    elseif data.has_newer_date then
+        values.value_color = beautiful.warning_color
+    end
+
+    return values
+end
 
 value_monitor:set_value(MonitorState.UpToDate)
 

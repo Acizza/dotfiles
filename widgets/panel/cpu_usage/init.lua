@@ -17,20 +17,22 @@ local string_match = string.match
 local string_gmatch = string.gmatch
 
 local monitor_widget = ValueMonitor:new {
-    label = "CPU",
-    format_value = function(usage_pcnt)
-        return string_format("%.01f%%", usage_pcnt)
-    end,
-    updated_value = function(values, usage_pcnt)
-        if usage_pcnt >= 90 then
-            values.value_color = beautiful.critical_color
-        elseif usage_pcnt >= 75 then
-            values.value_color = beautiful.warning_color
-        end
-
-        return true
-    end,
+    label = "CPU"
 }
+
+function monitor_widget:on_set(usage_pcnt)
+    local values = {
+        formatted = string_format("%.01f%%", usage_pcnt)
+    }
+
+    if usage_pcnt >= 90 then
+        values.value_color = beautiful.critical_color
+    elseif usage_pcnt >= 75 then
+        values.value_color = beautiful.warning_color
+    end
+
+    return values
+end
 
 cpu_usage.widget = wibox.widget {
     layout = wibox.layout.fixed.horizontal,

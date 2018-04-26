@@ -17,33 +17,37 @@ local string_format = string.format
 
 local run_command = "amixer sget " .. config.audio_source
 
-local last_status = {
-    volume = 0,
-    muted = false,
-}
-
 local monitor_widget = ValueMonitor:new {
     label = "VOL",
-    format_value = function(status)
-        return string_format("%d%%", status.volume)
-    end,
-    updated_value = function(values, status, last_status)
-        local has_changed = status.volume ~= last_status.volume or
-                            status.muted ~= last_status.muted
-
-        if has_changed and status.muted then
-            values.label_color = beautiful.warning_color
-            values.value_color = beautiful.warning_color
-        end
-
-        return has_changed
-    end,
-    is_formatted_equal = function() return false end,
     last_value = {
         volume = 0,
         muted = false,
     }
 }
+
+function monitor_widget:on_set(status)
+    local has_changed = status.volume ~= self.last_value.volume or
+                        status.muted ~= self.last_value.muted
+
+    if not has_changed then
+        return { halt = true }
+    end
+
+    local values = {
+        formatted = string_format("%d%%", status.volume)
+    }
+
+    if status.muted then
+        values.label_color = beautiful.warning_color
+        values.value_color = beautiful.warning_color
+    end
+
+    return values
+end
+
+function monitor_widget:is_formatted_equal()
+    return false
+end
 
 volume_widget.widget = wibox.widget {
     layout = wibox.layout.fixed.horizontal,

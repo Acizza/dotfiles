@@ -29,11 +29,12 @@ function popup:initialize()
 
         for i = 1, num_cores do
             local monitor = ValueMonitor:new {
-                label = "CPU " .. i,
-                format_value = function(value)
-                    return string_format("%.01f%%", value)
-                end,
+                label = "CPU " .. i
             }
+
+            monitor.on_set = function(_, value)
+                return { formatted = string_format("%.01f%%", value) }
+            end
 
             monitor:set_value("0")
             monitor.textbox.align = "center"

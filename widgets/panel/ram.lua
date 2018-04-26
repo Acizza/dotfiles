@@ -12,14 +12,17 @@ local string_match = string.match
 local string_format = string.format
 
 local monitor_widget = ValueMonitor:new {
-    label = "RAM",
-    format_value = function(usage_data)
-        local usage_gb = usage_data.used_kb / 1024 / 1024
-        local usage_pcnt = usage_data.used_kb / math_max(usage_data.total, 1) * 100
-
-        return string_format("%.03f GB (%d%%)", usage_gb, usage_pcnt)
-    end,
+    label = "RAM"
 }
+
+function monitor_widget:on_set(usage_data)
+    local usage_gb = usage_data.used_kb / 1024 / 1024
+    local usage_pcnt = usage_data.used_kb / math_max(usage_data.total, 1) * 100
+
+    return {
+        formatted = string_format("%.03f GB (%d%%)", usage_gb, usage_pcnt)
+    }
+end
 
 ram.widget = wibox.widget {
     layout = wibox.layout.fixed.horizontal,

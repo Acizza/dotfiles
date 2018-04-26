@@ -14,15 +14,21 @@ local run_command = "df -k " .. table.concat(widget_config.partitions, " ")
 local partition_data = {}
 
 for _,partition in pairs(widget_config.partitions) do
+    local monitor = ValueMonitor:new {
+        label = partition
+    }
+
+    monitor.on_set = function(_, available_kb)
+        local usage_gb = available_kb / 1024 / 1024
+        
+        return {
+            formatted = string_format("%0.02f GB", usage_gb)
+        }
+    end
+
     partition_data[#partition_data + 1] = {
         partition = partition,
-        monitor_widget = ValueMonitor:new {
-            label = partition,
-            format_value = function(available_kb)
-                local usage_gb = available_kb / 1024 / 1024
-                return string_format("%0.02f GB", usage_gb)
-            end,
-        },
+        monitor_widget = monitor,
     }
 end
 
