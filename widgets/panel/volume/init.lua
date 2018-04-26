@@ -6,6 +6,7 @@ local config = require("config")
 local gears = require("gears")
 local wibox = require("wibox")
 local widget = require("widgets/value_monitor")
+local volume_module = require("module/volume")
 
 local spotify_popup = require("widgets/panel/volume/spotify_popup")
 
@@ -70,5 +71,7 @@ end
 awful.widget.watch(run_command, widget_config.update_time_secs, function(_, stdout)
     update_from_output(stdout)
 end)
+
+volume_module.add_set_hook(volume_widget.update)
 
 return volume_widget
