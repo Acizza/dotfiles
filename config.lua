@@ -60,7 +60,7 @@ config.widgets = {
     system_status = {
         startup_delay_secs = 10,
         update_time_hours = 2,
-        update_channel = "nixos-unstable",
+        update_channel = "nixos-unstable-small",
     },
     volume = {
         update_time_secs = 15,
