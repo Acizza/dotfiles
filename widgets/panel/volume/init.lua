@@ -48,7 +48,9 @@ local monitor_widget = ValueMonitor:new {
 volume_widget.widget = wibox.widget {
     layout = wibox.layout.fixed.horizontal,
     buttons = gears.table.join(
-        awful.button({}, 1, function() spotify_popup:toggle() end)
+        awful.button({}, 1, function() spotify_popup:toggle() end),
+        awful.button({}, 4, volume_module.increment_source),
+        awful.button({}, 5, volume_module.decrement_source)
     ),
     monitor_widget.textbox,
 }
