@@ -64,6 +64,19 @@ function util.file_exists(path)
     end
 end
 
+function util.read_file(path)
+    local file = io_open(path, "r")
+
+    if file == nil then
+        return nil
+    end
+
+    local contents = file:read("*all")
+    file:close()
+
+    return contents
+end
+
 -- Call with nil to apply the wallpaper to all screens.
 function util.set_wallpaper(screen, wallpaper)
     gears.wallpaper.maximized(wallpaper, screen, true)
