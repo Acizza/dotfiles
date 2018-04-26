@@ -35,7 +35,11 @@ local MonitorState = {
     },
 }
 
-local run_command = "curl -L https://nixos.org/channels/" .. widget_config.update_channel
+-- Automatically fetch the update channel
+awful.spawn.easy_async("nix-channel --list", function(stdout)
+    local channel = string_match(stdout, "nixos (.-)\n")
+    system_status.update_command = "curl -L " .. channel
+end)
 
 local value_monitor = ValueMonitor:new {
     label = "SYS",
@@ -51,7 +55,6 @@ local value_monitor = ValueMonitor:new {
     end,
 }
 
--- Update the widget now in case there's a connection problem when initially syncing
 value_monitor:set_value(MonitorState.UpToDate)
 
 local function parse_command_output(stdout, stderr, exit_code)
@@ -85,7 +88,7 @@ end
 function system_status.update()
     value_monitor:set_value(MonitorState.Checking)
 
-    awful.spawn.easy_async(run_command, function(stdout, stderr, _, exit_code)
+    awful.spawn.easy_async(system_status.update_command, function(stdout, stderr, _, exit_code)
         parse_command_output(stdout, stderr, exit_code)
     end)
 end
