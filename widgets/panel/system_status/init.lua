@@ -41,6 +41,8 @@ awful.spawn.easy_async("nix-channel --list", function(stdout)
     system_status.update_command = "curl -L " .. channel
 end)
 
+local channel_path = os.getenv("HOME") .. "/.nix-defexpr/channels_root/nixos/"
+
 local value_monitor = ValueMonitor:new {
     label = "SYS",
     format_value = function(data) return data.text end,
@@ -59,30 +61,27 @@ value_monitor:set_value(MonitorState.UpToDate)
 
 local function parse_command_output(stdout, stderr, exit_code)
     if exit_code ~= 0 then
-        naughty.notify({
-            preset = naughty.config.presets.critical,
-            title = "Error Syncing System Update Channel",
-            text = stderr,
-        })
-
-        value_monitor:set_value(MonitorState.Error)
+        system_status.display_error("error fetching latest version: " .. tostring(stderr))
         return
     end
 
     local latest_version = string_match(stdout, "<title>.-release%s(.-)</title>")
 
-    awful.spawn.easy_async("nix-info", function(info_out)
-        local current_version = string_match(info_out, "channels%(root%): \"(.-)\"")
-        local state
+    local sys_version_major = util.read_file(channel_path .. ".version")
+    local sys_version_suffix = util.read_file(channel_path .. ".version-suffix")
 
-        if latest_version ~= current_version then
-            state = MonitorState.OutOfDate
-        else
-            state = MonitorState.UpToDate
-        end
+    if sys_version_major == nil or sys_version_suffix == nil then
+        system_status.display_error("no version information found")
+        return
+    end
 
-        value_monitor:set_value(state)
-    end)
+    local sys_version = "nixos-" .. sys_version_major .. sys_version_suffix
+
+    if sys_version ~= latest_version then
+        value_monitor:set_value(MonitorState.OutOfDate)
+    else
+        value_monitor:set_value(MonitorState.UpToDate)
+    end
 end
 
 function system_status.update()
@@ -91,6 +90,16 @@ function system_status.update()
     awful.spawn.easy_async(system_status.update_command, function(stdout, stderr, _, exit_code)
         parse_command_output(stdout, stderr, exit_code)
     end)
+end
+
+function system_status.display_error(msg)
+    value_monitor:set_value(MonitorState.Error)
+
+    naughty.notify({
+        preset = naughty.config.presets.critical,
+        title = "Error In System Status Widget",
+        text = msg,
+    })
 end
 
 system_status.widget = wibox.widget {
