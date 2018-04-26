@@ -4,16 +4,23 @@ local awful = require("awful")
 local config = require("config")
 local gears = require("gears")
 local key_bindings = require("key_bindings")
-local volume_widget = require("widgets/panel/volume")
 
 local table_pack = table.pack
 local string_match = string.match
+
+local on_set_hooks = {}
+
+function volume.add_set_hook(func)
+    on_set_hooks[#on_set_hooks + 1] = func
+end
 
 local function set_volume(operation)
     local command = "amixer -q sset " .. config.audio_source .. " " .. operation
 
     awful.spawn.easy_async(command, function()
-        volume_widget.update()
+        for _,func in pairs(on_set_hooks) do
+            func()
+        end
     end)
 end
 
