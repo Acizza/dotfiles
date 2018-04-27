@@ -2,8 +2,9 @@ local awful = require("awful")
 local config = require("config")
 local gears = require("gears")
 local lfs = require("lfs")
-local wibox = require("wibox")
+local spotify_module = require("module/spotify")
 local util = require("util")
+local wibox = require("wibox")
 
 local string_format = string.format
 local string_match = string.match
@@ -14,6 +15,35 @@ local spotify_popup = WidgetPopup:new {
 }
 
 local widget_config = config.widgets.volume
+
+local prev_song_text = "<"
+local toggle_song_text = "="
+local play_song_text = "=>"
+local next_song_text = ">"
+
+function spotify_popup:initialize_media_button(text, spotify_func)
+    local click_func = function()
+        spotify_func()
+
+        -- Delay the widget update to give Spotify time to update the metadata
+        gears.timer {
+            timeout = 1,
+            autostart = true,
+            single_shot = true,
+            callback = function() self:update() end,
+        }
+    end
+
+    return wibox.widget {
+        text = text,
+        font = "14",
+        align = "center",
+        buttons = gears.table.join(
+            awful.button({}, 1, click_func)
+        ),
+        widget = wibox.widget.textbox(),
+    }
+end
 
 function spotify_popup:initialize_paths()
     self.album_cover_cache = gears.filesystem.get_cache_dir() .. "spotify/"
@@ -43,6 +73,10 @@ function spotify_popup:initialize()
         label = "Album",
     }
 
+    self.prev_song = self:initialize_media_button(prev_song_text, spotify_module.prev_track)
+    self.toggle_song = self:initialize_media_button(toggle_song_text, spotify_module.toggle_track)
+    self.next_song = self:initialize_media_button(next_song_text, spotify_module.next_track)
+
     self:set_nothing_playing()
 
     self:setup({
@@ -69,12 +103,19 @@ function spotify_popup:initialize()
                 layout = wibox.container.margin,
                 left = 30,
                 right = 10,
+                bottom = 35,
                 {
                     layout = wibox.layout.fixed.vertical,
                     self.song_title.textbox,
                     self.song_artist.textbox,
                     self.song_album.textbox,
                 },
+            },
+            {
+                layout = wibox.layout.flex.horizontal,
+                self.prev_song,
+                self.toggle_song,
+                self.next_song,
             }
         }
     })
