@@ -155,17 +155,17 @@ local function set_value_escaped(monitor, value)
 end
 
 function spotify_popup:update()
-    awful.spawn.easy_async("sp metadata", function(stdout, _, _, exit_code)
-        if exit_code ~= 0 then
+    spotify_module.get_metadata(function(metadata)
+        if metadata == nil then
             self:set_nothing_playing()
             return
         end
 
-        set_value_escaped(self.song_title, string_match(stdout, "title|(.-)\n"))
-        set_value_escaped(self.song_artist, string_match(stdout, "artist|(.-)\n"))
-        set_value_escaped(self.song_album, string_match(stdout, "album|(.-)\n"))
+        set_value_escaped(self.song_title, metadata.title)
+        set_value_escaped(self.song_artist, metadata.artist)
+        set_value_escaped(self.song_album, metadata.album)
 
-        spotify_popup:update_album_cover(string_match(stdout, "artUrl|(.-)\n"))
+        self:update_album_cover(metadata.cover_url)
     end)
 end
 
