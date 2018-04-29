@@ -1,6 +1,7 @@
 local awful = require("awful")
 local wibox = require("wibox")
 local gears = require("gears")
+local file = require("util/file")
 
 require("widgets/value_monitor")
 require("widgets/popup")
@@ -88,10 +89,7 @@ function popup:on_close()
 end
 
 function popup:update_uptime()
-    local uptime_file = io_open("/proc/uptime")
-    local uptime_contents = uptime_file:read()
-    uptime_file:close()
-
+    local uptime_contents = file.read("/proc/uptime")
     local uptime_seconds = uptime_contents:sub(1, uptime_contents:find(' '))
     
     self.uptime_widget:set_value(uptime_seconds)

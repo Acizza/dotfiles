@@ -8,7 +8,7 @@ local lfs = require("lfs")
 local naughty = require("naughty")
 local wibox = require("wibox")
 local widget = require("widgets/value_monitor")
-local util = require("util")
+local file = require("util/file")
 
 local popup = require("widgets/panel/system_status/popup")
 
@@ -71,8 +71,8 @@ local function parse_command_output(stdout, stderr, exit_code)
 
     local latest_version = string_match(stdout, "<title>.-release%s(.-)</title>")
 
-    local sys_version_major = util.read_file(channel_path .. ".version")
-    local sys_version_suffix = util.read_file(channel_path .. ".version-suffix")
+    local sys_version_major = file.read(channel_path .. ".version")
+    local sys_version_suffix = file.read(channel_path .. ".version-suffix")
 
     if sys_version_major == nil or sys_version_suffix == nil then
         system_status.display_error("no version information found")

@@ -3,7 +3,7 @@ local config = require("config")
 local gears = require("gears")
 local lfs = require("lfs")
 local spotify_module = require("module/spotify")
-local util = require("util")
+local file = require("util/file")
 local wibox = require("wibox")
 
 local string_format = string.format
@@ -138,7 +138,7 @@ function spotify_popup:update_album_cover(url)
 
     local cached_image_path = self.album_cover_cache .. parse_image_id(url)
 
-    if util.file_exists(cached_image_path) then
+    if file.exists(cached_image_path) then
         self.album_art.image = cached_image_path
         return
     end

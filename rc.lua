@@ -13,7 +13,7 @@ local config = require("config")
 beautiful.init(config.theme_path)
 
 local key_bindings = require("key_bindings")
-local util = require("util")
+local sys_util = require("util/system")
 
 local run_dialog = require("run_dialog")
 local volume_module = require("module/volume")
@@ -62,7 +62,7 @@ awful.layout.layouts = {
 root.keys(key_bindings.global)
 
 screen.connect_signal("property::geometry", function(screen)
-    util.set_wallpaper(screen, config.wallpaper)
+    sys_util.set_wallpaper(screen, config.wallpaper)
 end)
 
 do
@@ -78,7 +78,7 @@ do
     local systray = wibox.widget.systray()
 
     awful.screen.connect_for_each_screen(function(screen)
-        util.set_wallpaper(screen, config.wallpaper)
+        sys_util.set_wallpaper(screen, config.wallpaper)
         
         awful.tag(config.tags, screen, awful.layout.layouts[1])
 
