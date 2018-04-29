@@ -1,13 +1,13 @@
 local config = {}
 local awful = require("awful")
 local gears = require("gears")
-local util = require("util")
+local file = require("util/file")
 
 config.home_path = os.getenv("HOME") .. "/"
 config.awesome_config = gears.filesystem.get_configuration_dir()
 
 config.theme_path = config.awesome_config .. "theme.lua"
-config.wallpaper = util.random_file_in_dir(config.home_path .. "backgrounds/active/")
+config.wallpaper = file.get_random_in_dir(config.home_path .. "backgrounds/active/")
 
 config.modkey = "Mod4"
 

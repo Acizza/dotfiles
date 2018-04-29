@@ -1,13 +1,12 @@
-local util = {}
+local file = {}
 
 local lfs = require("lfs")
-local gears = require("gears")
 local naughty = require("naughty")
 
 local io_open = io.open
 local math_random = math.random
 
-function util.read_dir(dir)
+function file.read_dir(dir)
     local files = {}
     
     for file in lfs.dir(dir) do
@@ -24,8 +23,8 @@ function util.read_dir(dir)
     return files
 end
 
-function util.random_file_in_dir(dir)
-    local files = util.read_dir(dir)
+function file.get_random_in_dir(dir)
+    local files = file.read_dir(dir)
 
     if #files == 0 then
         naughty.notify({
@@ -40,7 +39,7 @@ function util.random_file_in_dir(dir)
     return files[math_random(1, #files)]
 end
 
-function util.write_file(path, text)
+function file.write(path, text)
     local file = io_open(path, "w")
     
     if file == nil then
@@ -53,7 +52,7 @@ function util.write_file(path, text)
     return true
 end
 
-function util.file_exists(path)
+function file.exists(path)
     local file = io_open(path, "r")
 
     if file ~= nil then
@@ -64,7 +63,7 @@ function util.file_exists(path)
     end
 end
 
-function util.read_file(path)
+function file.read(path)
     local file = io_open(path, "r")
 
     if file == nil then
@@ -77,9 +76,4 @@ function util.read_file(path)
     return contents
 end
 
--- Call with nil to apply the wallpaper to all screens.
-function util.set_wallpaper(screen, wallpaper)
-    gears.wallpaper.maximized(wallpaper, screen, true)
-end
-
-return util
+return file
