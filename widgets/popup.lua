@@ -4,6 +4,8 @@ local awful = require("awful")
 local config = require("config")
 local gears = require("gears")
 
+local dpi = require("beautiful.xresources").apply_dpi
+
 popup.open_popup = nil
 
 WidgetPopup = {}
@@ -11,8 +13,8 @@ WidgetPopup.__index = WidgetPopup
 
 function WidgetPopup:new(options)
     local wibar = awful.wibar {
-        width = options.width,
-        height = options.height,
+        width = dpi(options.width),
+        height = dpi(options.height),
         opacity = config.panel_opacity,
         visible = false,
         ontop = true,
