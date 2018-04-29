@@ -1,0 +1,11 @@
+Feed Settings:
+  - County: Sacramento
+    Spike Percentages:
+      Jump Required: 0.3
+
+Misc:
+  State Feeds ID: 6 # California
+  Max Times To Show Feed: 5
+
+Feed Sorting:
+  Sort By: Jump
