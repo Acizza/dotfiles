@@ -8,6 +8,8 @@ local usage = require("widgets/panel/cpu_usage/usage")
 local string_format = string.format
 local string_match = string.match
 
+local dpi = require("beautiful.xresources").apply_dpi
+
 local popup = WidgetPopup:new {
     width = 100,
     height = 150,
@@ -47,8 +49,8 @@ function popup:initialize()
             layout = wibox.layout.fixed.vertical,
             {
                 layout = wibox.container.margin,
-                top = 20,
-                bottom = 20,
+                top = dpi(10),
+                bottom = dpi(10),
                 {
                     markup = "<b>CPU Usage</b>",
                     align = "center",

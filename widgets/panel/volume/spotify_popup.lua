@@ -9,6 +9,8 @@ local wibox = require("wibox")
 local string_format = string.format
 local string_match = string.match
 
+local dpi = require("beautiful.xresources").apply_dpi
+
 local spotify_popup = WidgetPopup:new {
     width = 325,
     height = 128,
@@ -83,16 +85,16 @@ function spotify_popup:initialize()
         layout = wibox.layout.align.horizontal,
         {
             layout = wibox.layout.manual,
-            forced_width = 256,
-            forced_height = 196,
+            forced_width = dpi(128),
+            forced_height = dpi(98),
             self.album_art,
         },
         {
             layout = wibox.layout.fixed.vertical,
             {
                 layout = wibox.container.margin,
-                top = 20,
-                bottom = 30,
+                top = dpi(10),
+                bottom = dpi(15),
                 {
                     markup = "<b>Spotify Info</b>",
                     align = "center",
@@ -101,9 +103,9 @@ function spotify_popup:initialize()
             },
             {
                 layout = wibox.container.margin,
-                left = 30,
-                right = 10,
-                bottom = 35,
+                left = dpi(15),
+                right = dpi(5),
+                bottom = dpi(18),
                 {
                     layout = wibox.layout.fixed.vertical,
                     self.song_title.textbox,
