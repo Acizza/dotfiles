@@ -80,6 +80,7 @@ end
 -- Call with nil to apply the wallpaper to all screens.
 function util.set_wallpaper(screen, wallpaper)
     gears.wallpaper.maximized(wallpaper, screen, true)
+    awesome.spawn("wal -q -i \"" .. wallpaper .. "\"")
 end
 
 return util
