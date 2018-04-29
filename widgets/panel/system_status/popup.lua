@@ -10,8 +10,8 @@ local io_open = io.open
 local string_match = string.match
 
 local popup = WidgetPopup:new {
-    width = 300,
-    height = 200,
+    width = 150,
+    height = 100,
 }
 
 function popup:initialize()

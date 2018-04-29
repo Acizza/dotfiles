@@ -9,8 +9,8 @@ local string_format = string.format
 local string_match = string.match
 
 local popup = WidgetPopup:new {
-    width = 200,
-    height = 300,
+    width = 100,
+    height = 150,
 }
 
 popup.usage_monitors = {}

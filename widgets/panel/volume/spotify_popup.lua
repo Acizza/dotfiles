@@ -10,8 +10,8 @@ local string_format = string.format
 local string_match = string.match
 
 local spotify_popup = WidgetPopup:new {
-    width = 650,
-    height = 256,
+    width = 325,
+    height = 128,
 }
 
 local widget_config = config.widgets.volume
