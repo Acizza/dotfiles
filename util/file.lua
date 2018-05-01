@@ -5,6 +5,7 @@ local naughty = require("naughty")
 
 local io_open = io.open
 local math_random = math.random
+local string_sub = string.sub
 
 function file.read_dir(dir)
     local files = {}
@@ -74,6 +75,13 @@ function file.read(path)
     file:close()
 
     return contents
+end
+
+function file.read_and_trim_end(path)
+    local contents = file.read(path)
+    if contents == nil then return nil end
+
+    return string_sub(contents, 1, #contents - 1)
 end
 
 return file
