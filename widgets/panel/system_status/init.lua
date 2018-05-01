@@ -13,6 +13,7 @@ local file = require("util/file")
 local popup = require("widgets/panel/system_status/popup")
 
 local string_match = string.match
+local string_sub = string.sub
 
 local widget_config = config.widgets.system_status
 
@@ -78,6 +79,9 @@ local function parse_command_output(stdout, stderr, exit_code)
         system_status.display_error("no version information found")
         return
     end
+
+    -- Trim newline from version
+    sys_version_major = string_sub(sys_version_major, 1, #sys_version_major - 1)
 
     local sys_version = "nixos-" .. sys_version_major .. sys_version_suffix
 
