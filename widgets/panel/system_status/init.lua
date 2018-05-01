@@ -72,16 +72,13 @@ local function parse_command_output(stdout, stderr, exit_code)
 
     local latest_version = string_match(stdout, "<title>.-release%s(.-)</title>")
 
-    local sys_version_major = file.read(channel_path .. ".version")
+    local sys_version_major = file.read_and_trim_end(channel_path .. ".version")
     local sys_version_suffix = file.read(channel_path .. ".version-suffix")
 
     if sys_version_major == nil or sys_version_suffix == nil then
         system_status.display_error("no version information found")
         return
     end
-
-    -- Trim newline from version
-    sys_version_major = string_sub(sys_version_major, 1, #sys_version_major - 1)
 
     local sys_version = "nixos-" .. sys_version_major .. sys_version_suffix
 
