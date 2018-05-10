@@ -1,0 +1,4 @@
+#/usr/bin/env bash
+
+cat ~/.cache/wal/sequences
+ranger
