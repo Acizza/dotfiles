@@ -25,7 +25,7 @@ config.program_shortcuts = {
     {
         modifier = { config.modkey },
         key = "bracketright",
-        exec = "termite -e ranger"
+        exec = "termite -e " .. config.home_path .. "ranger.sh"
     },
     {
         modifier = { config.modkey },
