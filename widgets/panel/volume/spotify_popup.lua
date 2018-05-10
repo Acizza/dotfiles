@@ -1,4 +1,5 @@
 local awful = require("awful")
+local beautiful = require("beautiful")
 local config = require("config")
 local gears = require("gears")
 local lfs = require("lfs")
@@ -47,6 +48,23 @@ function spotify_popup:initialize_media_button(text, spotify_func)
     }
 end
 
+function spotify_popup:initialize_song_info_text(title, value_widget)
+    return {
+        layout = wibox.layout.fixed.horizontal,
+        {
+            markup = "<span color=\"" .. beautiful.widget_label .. "\">" .. title .. "</span> ",
+            widget = wibox.widget.textbox(),
+        },
+        {
+            layout = wibox.container.scroll.horizontal,
+            step_function = wibox.container.scroll.step_functions
+                                .waiting_nonlinear_back_and_forth,
+            speed = 100,
+            value_widget,
+        }
+    }
+end
+
 function spotify_popup:initialize_paths()
     self.album_cover_cache = gears.filesystem.get_cache_dir() .. "spotify/"
     lfs.mkdir(self.album_cover_cache)
@@ -63,17 +81,9 @@ function spotify_popup:initialize()
 
     self.album_art = wibox.widget.imagebox(nil, true)
 
-    self.song_title = ValueMonitor:new {
-        label = "Title",
-    }
-
-    self.song_artist = ValueMonitor:new {
-        label = "Artist",
-    }
-
-    self.song_album = ValueMonitor:new {
-        label = "Album",
-    }
+    self.song_title = wibox.widget.textbox()
+    self.song_artist = wibox.widget.textbox()
+    self.song_album = wibox.widget.textbox()
 
     self.prev_song = self:initialize_media_button(prev_song_text, spotify_module.prev_track)
     self.toggle_song = self:initialize_media_button(toggle_song_text, spotify_module.toggle_track)
@@ -108,9 +118,9 @@ function spotify_popup:initialize()
                 bottom = dpi(18),
                 {
                     layout = wibox.layout.fixed.vertical,
-                    self.song_title.textbox,
-                    self.song_artist.textbox,
-                    self.song_album.textbox,
+                    self:initialize_song_info_text("Title", self.song_title),
+                    self:initialize_song_info_text("Artist", self.song_artist),
+                    self:initialize_song_info_text("Album", self.song_album),
                 },
             },
             {
@@ -124,9 +134,9 @@ function spotify_popup:initialize()
 end
 
 function spotify_popup:set_nothing_playing()
-    self.song_title:set_value("none")
-    self.song_artist:set_value("none")
-    self.song_album:set_value("none")
+    self.song_title.text = "none"
+    self.song_artist.text = "none"
+    self.song_album.text = "none"
 
     self.album_art.image = nil
 end
@@ -152,10 +162,6 @@ function spotify_popup:update_album_cover(url)
     end)
 end
 
-local function set_value_escaped(monitor, value)
-    monitor:set_value(gears.string.xml_escape(value))
-end
-
 function spotify_popup:update()
     spotify_module.get_metadata(function(metadata)
         if metadata == nil then
@@ -163,9 +169,9 @@ function spotify_popup:update()
             return
         end
 
-        set_value_escaped(self.song_title, metadata.title)
-        set_value_escaped(self.song_artist, metadata.artist)
-        set_value_escaped(self.song_album, metadata.album)
+        self.song_title.text = metadata.title
+        self.song_artist.text = metadata.artist
+        self.song_album.text = metadata.album
 
         self:update_album_cover(metadata.cover_url)
     end)
