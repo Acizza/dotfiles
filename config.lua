@@ -48,6 +48,7 @@ config.tags = { "web", "dev", "term", "spotify", "steam", "misc" }
 
 config.startup_programs = {
     "numlockx",
+    "compton",
     "nm-applet",
     "ibus-daemon -d",
     "sh -c 'sleep 10; exec bcnotif'"
