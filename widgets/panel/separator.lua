@@ -10,7 +10,6 @@ separator.left = wibox.widget {
     {
         widget = wibox.widget.textbox,
         text = widget_config.left_text,
-        font = "10",
     }
 }
 
@@ -19,7 +18,6 @@ separator.middle = wibox.widget {
     {
         widget = wibox.widget.textbox,
         text = widget_config.middle_text,
-        font = "10",
     },
 }
 
@@ -28,7 +26,6 @@ separator.right = wibox.widget {
     {
         widget = wibox.widget.textbox,
         text = widget_config.right_text,
-        font = "10",
     },
 }
 
