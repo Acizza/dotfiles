@@ -20,7 +20,7 @@ local volume_module = require("module/volume")
 
 local shutdown_menu = require("widgets/system/shutdown_menu")
 local separator = require("widgets/panel/separator")
-local system_status = require("widgets/panel/system_status")
+--local system_status = require("widgets/panel/system_status")
 local weather_widget = require("widgets/panel/weather")
 local disk_usage = require("widgets/panel/disk_usage")
 local ram = require("widgets/panel/ram")
@@ -127,7 +127,7 @@ do
             { -- Right widgets
                 layout = wibox.layout.fixed.horizontal,
                 separator.left,
-                system_status.widget,
+                --system_status.widget,
                 separator.middle,
                 weather_widget.widget,
                 separator.middle,

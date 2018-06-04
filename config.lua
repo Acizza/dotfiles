@@ -20,7 +20,7 @@ config.program_shortcuts = {
     {
         modifier = { config.modkey },
         key = "backslash",
-        exec = "firefox"
+        exec = "firefox-developer-edition"
     },
     {
         modifier = { config.modkey },
