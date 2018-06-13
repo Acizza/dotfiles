@@ -80,6 +80,11 @@ config.widgets = {
     ram = {
         update_time_secs = 1.5,
     },
+    net = {
+        update_time_secs = 1.5,
+        interface = "enp3s0",
+        space_between_stats = 20,
+    },
     separator = {
         left_text = "[ ",
         middle_text = " ][ ",
