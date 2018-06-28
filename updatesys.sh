@@ -8,4 +8,7 @@ if [ $? == 0 ]; then
 
     printf "!! removing cached package files\n\n"
     sudo paccache -rvk 0
+
+    printf "!! detecting unneeded packages\n\n"
+    sudo pacman -Rcuns $(pacman -Qtdq)
 fi
