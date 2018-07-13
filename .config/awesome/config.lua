@@ -92,10 +92,10 @@ config.widgets = {
         space_between_partitions = 20,
     },
     ram = {
-        update_time_secs = 1.5,
+        update_time_secs = 2,
     },
     net = {
-        update_time_secs = 1.5,
+        update_time_secs = 2,
         interface = "enp3s0",
         space_between_stats = 20,
     },
