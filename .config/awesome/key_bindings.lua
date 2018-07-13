@@ -104,7 +104,9 @@ key_bindings.client = {
         -- Toggle floating
         awful.key({ config.modkey, "Control" }, "space",  awful.client.floating.toggle),
         -- Toggle keep on top
-        awful.key({ config.modkey }, "t", function(c) c.ontop = not c.ontop end)
+        awful.key({ config.modkey }, "t", function(c) c.ontop = not c.ontop end),
+        -- Toggle maximized state
+        awful.key({ config.modkey }, "m", function(c) c.maximized = not c.maximized end)
     ),
     buttons = gears.table.join(
         -- Focus window
