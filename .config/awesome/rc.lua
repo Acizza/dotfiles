@@ -182,7 +182,7 @@ awful.rules.rules = {
             placement = awful.placement.no_overlap + awful.placement.no_offscreen,
         }
     },
-    { -- Floating clients.
+    { -- Floating clients
         rule_any = gears.table.join(config.floating_windows, {
             role = {
                 "pop-up",
@@ -198,6 +198,15 @@ awful.rules.rules = {
         },
         properties = {
             tag = "steam",
+            floating = true,
+        }
+    },
+    { -- Assign Wine programs to its own tag, and make them float
+        rule = {
+            class = "Wine"
+        },
+        properties = {
+            tag = "wine",
             floating = true,
         }
     },
