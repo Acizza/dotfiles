@@ -36,6 +36,17 @@ key_bindings.global = gears.table.join(
     awful.key({ config.modkey }, "space", function() awful.layout.inc(1) end),
     -- Go to previous window layout
     awful.key({ config.modkey, "Shift" }, "space", function() awful.layout.inc(-1) end),
+    -- Unminimize all clients on the currently selected tag
+    awful.key({ config.modkey, "Control" }, "m", function()
+        local tag = awful.screen.focused().selected_tag
+        if tag == nil then return end
+
+        local clients = tag:clients()
+
+        for i = 1, #clients do
+            clients[i].minimized = false
+        end
+    end),
     -- Open run dialog
     awful.key({ config.modkey }, "d", run_dialog.open)
 )
