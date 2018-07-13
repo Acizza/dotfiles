@@ -74,7 +74,7 @@ config.widgets = {
     },
     system_status = {
         startup_delay_secs = 10,
-        update_time_hours = 2,
+        update_time_hours = 4,
     },
     weather = {
         startup_delay_secs = 10,
