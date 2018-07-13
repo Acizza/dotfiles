@@ -1,14 +1,20 @@
 local file = {}
 
 local lfs = require("lfs")
-local naughty = require("naughty")
 
 local io_open = io.open
 local math_random = math.random
 local string_sub = string.sub
+local os_rename = os.rename
+
+function file.exists(path)
+    return os_rename(path) and true or false
+end
 
 function file.read_dir(dir)
     local files = {}
+
+    if not file.exists(dir) then return {} end
     
     for file in lfs.dir(dir) do
         if file ~= "." and file ~= ".." then
@@ -28,13 +34,7 @@ function file.get_random_in_dir(dir)
     local files = file.read_dir(dir)
 
     if #files == 0 then
-        naughty.notify({
-            preset = naughty.config.presets.critical,
-            title = "Empty Directory",
-            text = "no files found in " .. dir
-        })
-
-        return
+        return nil
     end
 
     return files[math_random(1, #files)]
