@@ -82,7 +82,17 @@ do
     awful.screen.connect_for_each_screen(function(screen)
         sys_util.set_wallpaper(screen, config.wallpaper)
         
-        awful.tag(config.tags, screen, awful.layout.layouts[1])
+        for i,tag in pairs(config.tags) do
+            if i == 1 and tag.selected == nil then
+                tag.selected = true
+            end
+
+            if tag.layout == nil then
+                tag.layout = awful.layout.suit.tile
+            end
+
+            awful.tag.add(tag.name, tag)
+        end
 
         -- Using these buttons globally on a panel causes an error when a widget
         -- has other buttons attached to it, so we have to attach them manually to each sub-widget

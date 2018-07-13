@@ -44,7 +44,21 @@ config.program_shortcuts = {
     },
 }
 
-config.tags = { "web", "dev", "term", "spotify", "steam", "misc" }
+config.tags = {
+    { name = "web" },
+    { name = "dev" },
+    { name = "misc1" },
+    { name = "misc2" },
+    { name = "spotify" },
+    {
+        name = "steam",
+        layout = awful.layout.suit.floating,
+    },
+    {
+        name = "wine",
+        layout = awful.layout.suit.floating,
+    },
+}
 
 config.startup_programs = {
     "numlockx",
