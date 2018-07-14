@@ -70,7 +70,7 @@ config.startup_programs = {
 
 config.widgets = {
     cpu_usage = {
-        update_time_secs = 1.5,
+        update_time_secs = 2,
     },
     system_status = {
         startup_delay_secs = 10,
