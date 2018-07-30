@@ -13,8 +13,8 @@ local string_match = string.match
 local dpi = require("beautiful.xresources").apply_dpi
 
 local popup = WidgetPopup:new {
-    width = 150,
-    height = 100,
+    width = dpi(150),
+    height = dpi(115),
 }
 
 function popup:initialize()

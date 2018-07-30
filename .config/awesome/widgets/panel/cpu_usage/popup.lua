@@ -11,8 +11,8 @@ local string_match = string.match
 local dpi = require("beautiful.xresources").apply_dpi
 
 local popup = WidgetPopup:new {
-    width = 100,
-    height = 150,
+    width = dpi(100),
+    height = dpi(150),
 }
 
 popup.usage_monitors = {}

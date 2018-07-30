@@ -13,8 +13,8 @@ local string_match = string.match
 local dpi = require("beautiful.xresources").apply_dpi
 
 local spotify_popup = WidgetPopup:new {
-    width = 325,
-    height = 128,
+    width = dpi(325),
+    height = dpi(128),
 }
 
 local widget_config = config.widgets.volume
