@@ -17,6 +17,7 @@ local sys_util = require("util/system")
 
 local run_dialog = require("run_dialog")
 local volume_module = require("module/volume")
+local spotify_module = require("module/spotify")
 
 local shutdown_menu = require("widgets/system/shutdown_menu")
 local separator = require("widgets/panel/separator")
