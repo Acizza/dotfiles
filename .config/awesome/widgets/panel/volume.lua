@@ -8,8 +8,6 @@ local wibox = require("wibox")
 local widget = require("widgets/value_monitor")
 local volume_module = require("module/volume")
 
-local spotify_popup = require("widgets/panel/volume/spotify_popup")
-
 local widget_config = config.widgets.volume
 
 local string_match = string.match
@@ -52,7 +50,7 @@ end
 volume_widget.widget = wibox.widget {
     layout = wibox.layout.fixed.horizontal,
     buttons = gears.table.join(
-        awful.button({}, 1, function() spotify_popup:toggle() end),
+        awful.button({}, 3, volume_module.toggle_source_mute),
         awful.button({}, 4, volume_module.increment_source),
         awful.button({}, 5, volume_module.decrement_source)
     ),
@@ -63,8 +61,8 @@ local function update_from_output(stdout)
     local volume_info = { string_match(stdout, "%[(%d+)%%%] %[(%a+)%]") }
 
     local status = {
-        volume = volume_info[1],
-        muted = volume_info[2] == "off"
+        volume = volume_info[1] or 0,
+        muted = volume_info[2] == nil and true or volume_info[2] == "off",
     }
 
     monitor_widget:set_value(status)
