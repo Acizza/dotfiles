@@ -4,11 +4,9 @@ local awful = require("awful")
 local beautiful = require("beautiful")
 local config = require("config")
 local gears = require("gears")
-local lfs = require("lfs")
 local naughty = require("naughty")
 local wibox = require("wibox")
 local widget = require("widgets/value_monitor")
-local file = require("util/file")
 
 local popup = require("widgets/panel/system_status/popup")
 
@@ -38,11 +36,9 @@ local MonitorState = {
 
 -- Automatically fetch the update channel
 awful.spawn.easy_async("nix-channel --list", function(stdout)
-    local channel = string_match(stdout, "nixos (.-)\n")
-    system_status.update_command = "curl -L " .. channel
+    local channel = string_match(stdout, "nixos (.-)\n") .. "/git-revision"
+    system_status.fetch_remote_revision_cmd = "curl -L " .. channel
 end)
-
-local channel_path = os.getenv("HOME") .. "/.nix-defexpr/channels_root/nixos/"
 
 local value_monitor = ValueMonitor:new {
     label = "SYS"
@@ -64,36 +60,37 @@ end
 
 value_monitor:set_value(MonitorState.UpToDate)
 
-local function parse_command_output(stdout, stderr, exit_code)
-    if exit_code ~= 0 then
-        system_status.display_error("error fetching latest version: " .. tostring(stderr))
-        return
-    end
+local function update_from_revision(remote_revision)
+    awful.spawn.easy_async("nixos-version --revision", function(local_revision, stderr, _, exit_code)
+        if exit_code ~= 0 then
+            value_monitor:set_value(MonitorState.Error)
+            system_status.display_error("error fetching local version: " .. tostring(stderr))
+            return
+        end
 
-    local latest_version = string_match(stdout, "<title>.-release%s(.-)</title>")
+        -- Trim newline from output
+        local_revision = string_sub(local_revision, 1, #local_revision - 1)
 
-    local sys_version_major = file.read_and_trim_end(channel_path .. ".version")
-    local sys_version_suffix = file.read(channel_path .. ".version-suffix")
-
-    if sys_version_major == nil or sys_version_suffix == nil then
-        system_status.display_error("no version information found")
-        return
-    end
-
-    local sys_version = "nixos-" .. sys_version_major .. sys_version_suffix
-
-    if sys_version ~= latest_version then
-        value_monitor:set_value(MonitorState.OutOfDate)
-    else
-        value_monitor:set_value(MonitorState.UpToDate)
-    end
+        -- Check if the remote revision starts with the same hash as the local one
+        if string_sub(remote_revision, 1, #local_revision) == local_revision then
+            value_monitor:set_value(MonitorState.UpToDate)
+        else
+            value_monitor:set_value(MonitorState.OutOfDate)
+        end
+    end)
 end
 
 function system_status.update()
     value_monitor:set_value(MonitorState.Checking)
 
-    awful.spawn.easy_async(system_status.update_command, function(stdout, stderr, _, exit_code)
-        parse_command_output(stdout, stderr, exit_code)
+    awful.spawn.easy_async(system_status.fetch_remote_revision_cmd, function(rev, stderr, _, exit_code)
+        if exit_code ~= 0 then
+            value_monitor:set_value(MonitorState.Error)
+            system_status.display_error("error fetching latest remote version: " .. tostring(stderr))
+            return
+        end
+
+        update_from_revision(rev)
     end)
 end
 
