@@ -15,7 +15,7 @@ config.program_shortcuts = {
     {
         modifier = { config.modkey },
         key = "Return",
-        exec = "termite"
+        exec = os.getenv("TERM")
     },
     {
         modifier = { config.modkey },
