@@ -11,11 +11,13 @@ config.wallpaper = file.get_random_in_dir(config.home_path .. "backgrounds/activ
 
 config.modkey = "Mod4"
 
+local terminal_name = os.getenv("TERM")
+
 config.program_shortcuts = {
     {
         modifier = { config.modkey },
         key = "Return",
-        exec = os.getenv("TERM")
+        exec = terminal_name
     },
     {
         modifier = { config.modkey },
@@ -25,7 +27,7 @@ config.program_shortcuts = {
     {
         modifier = { config.modkey },
         key = "bracketright",
-        exec = "termite -e " .. config.home_path .. "ranger.sh"
+        exec = terminal_name .. " -e " .. config.home_path .. "ranger.sh"
     },
     {
         modifier = { config.modkey },
