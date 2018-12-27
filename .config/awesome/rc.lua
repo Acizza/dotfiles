@@ -16,8 +16,7 @@ local key_bindings = require("key_bindings")
 local sys_util = require("util/system")
 
 local run_dialog = require("run_dialog")
-local volume_module = require("module/volume")
-local spotify_module = require("module/spotify")
+local audio_module = require("module/audio")
 
 local shutdown_menu = require("widgets/system/shutdown_menu")
 local separator = require("widgets/panel/separator")

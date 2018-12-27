@@ -6,7 +6,7 @@ local config = require("config")
 local gears = require("gears")
 local wibox = require("wibox")
 local widget = require("widgets/value_monitor")
-local volume_module = require("module/volume")
+local audio_module = require("module/audio")
 
 local widget_config = config.widgets.volume
 
@@ -50,9 +50,9 @@ end
 volume_widget.widget = wibox.widget {
     layout = wibox.layout.fixed.horizontal,
     buttons = gears.table.join(
-        awful.button({}, 3, volume_module.toggle_source_mute),
-        awful.button({}, 4, volume_module.increment_source),
-        awful.button({}, 5, volume_module.decrement_source)
+        awful.button({}, 3, audio_module.toggle_volume_mute),
+        awful.button({}, 4, audio_module.increment_volume),
+        awful.button({}, 5, audio_module.decrement_volume)
     ),
     monitor_widget.textbox,
 }
@@ -76,6 +76,6 @@ awful.widget.watch(run_command, widget_config.update_time_secs, function(_, stdo
     update_from_output(stdout)
 end)
 
-volume_module.add_set_hook(volume_widget.update)
+audio_module.add_volume_set_hook(volume_widget.update)
 
 return volume_widget
