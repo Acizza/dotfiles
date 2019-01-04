@@ -89,7 +89,7 @@ config.widgets = {
         spotify_update_time_secs = 5,
     },
     disk_usage = {
-        partitions = { "/", "/home" },
+        partitions = { "/", "/home", "/media/data" },
         update_time_secs = 30,
         space_between_partitions = 20,
     },
