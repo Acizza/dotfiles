@@ -84,4 +84,22 @@ function file.read_and_trim_end(path)
     return string_sub(contents, 1, #contents - 1)
 end
 
+function file.read_lines(path)
+    local file = io_open(path, "r")
+
+    if file == nil then
+        return nil
+    end
+
+    local lines = {}
+
+    for line in io.lines(path) do
+        lines[#lines + 1] = line
+    end
+
+    file:close()
+
+    return lines
+end
+
 return file

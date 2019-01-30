@@ -7,11 +7,13 @@ local gears = require("gears")
 local naughty = require("naughty")
 local wibox = require("wibox")
 local widget = require("widgets/value_monitor")
+local file = require("util/file")
 
 local popup = require("widgets/panel/system_status/popup")
 
 local string_match = string.match
 local string_sub = string.sub
+local string_format = string.format
 
 local widget_config = config.widgets.system_status
 
@@ -34,6 +36,44 @@ local MonitorState = {
     },
 }
 
+local missed_updates = {
+    revision = 0,
+    num_missed = 0,
+    path = gears.filesystem.get_cache_dir() .. "missed_system_updates",
+}
+
+missed_updates.read_file = function()
+    local lines = file.read_lines(missed_updates.path)
+
+    if lines ~= nil and #lines >= 2 then
+        missed_updates.revision = lines[1]
+        missed_updates.num_missed = tonumber(lines[2])
+    end
+end
+
+missed_updates.write_file = function()
+    local content = missed_updates.revision .. '\n' .. missed_updates.num_missed
+    file.write(missed_updates.path, content)
+end
+
+missed_updates.clear = function()
+    missed_updates.num_missed = 0
+    missed_updates.write_file()
+end
+
+missed_updates.add = function(revision)
+    if revision == missed_updates.revision then
+        return
+    end
+
+    missed_updates.revision = revision
+    missed_updates.num_missed = missed_updates.num_missed + 1
+
+    missed_updates.write_file()
+end
+
+missed_updates.read_file()
+
 -- Automatically fetch the update channel
 awful.spawn.easy_async("nix-channel --list", function(stdout)
     local channel = string_match(stdout, "nixos (.-)\n") .. "/git-revision"
@@ -52,7 +92,11 @@ function value_monitor:on_set(data)
     if data == MonitorState.Error then
         values.value_color = beautiful.critical_color
     elseif data.has_newer_date then
-        values.value_color = beautiful.warning_color
+        values.formatted = string_format("%s (%d)", data.text, missed_updates.num_missed)
+
+        if missed_updates.num_missed > 3 then
+            values.value_color = beautiful.warning_color
+        end
     end
 
     return values
@@ -73,8 +117,10 @@ local function update_from_revision(remote_revision)
 
         -- Check if the remote revision starts with the same hash as the local one
         if string_sub(remote_revision, 1, #local_revision) == local_revision then
+            missed_updates.clear()
             value_monitor:set_value(MonitorState.UpToDate)
         else
+            missed_updates.add(string_sub(remote_revision, 1, #remote_revision - 1))
             value_monitor:set_value(MonitorState.OutOfDate)
         end
     end)
