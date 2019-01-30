@@ -53,6 +53,8 @@ do
     end)
 end
 
+awful.screen.set_auto_dpi_enabled(true)
+
 awful.layout.layouts = {
     awful.layout.suit.tile,
     awful.layout.suit.tile.left,

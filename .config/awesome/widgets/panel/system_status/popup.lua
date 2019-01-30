@@ -10,11 +10,9 @@ local os_date = os.date
 local io_open = io.open
 local string_match = string.match
 
-local dpi = require("beautiful.xresources").apply_dpi
-
 local popup = WidgetPopup:new {
-    width = dpi(150),
-    height = dpi(115),
+    width = 150,
+    height = 115,
 }
 
 function popup:initialize()
@@ -54,8 +52,8 @@ function popup:initialize()
         layout = wibox.layout.fixed.vertical,
         {
             layout = wibox.container.margin,
-            top = dpi(10),
-            bottom = dpi(10),
+            top = 10,
+            bottom = 10,
             {
                 markup = "<b>System Stats</b>",
                 align = "center",

@@ -4,8 +4,6 @@ local awful = require("awful")
 local wibox = require("wibox")
 local popup = require("widgets/popup")
 
-local dpi = require("beautiful.xresources").apply_dpi
-
 local function menu_item_text(text)
     local key_letter = text:sub(1, 1)
     local other_text = text:sub(2)
@@ -73,7 +71,7 @@ function shutdown_menu:initialize()
         header_text,
         {
             layout = wibox.container.margin,
-            top = dpi(15),
+            top = 15,
         },
         unpack(option_items)
     }
