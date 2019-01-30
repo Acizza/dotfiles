@@ -10,34 +10,48 @@ local string_match = string.match
 
 local widget_config = config.widgets.net
 
-local download_monitor = ValueMonitor:new {
-    label = "D"
+local net_monitor = ValueMonitor:new {
+    label = "NET",
+    last_value = {0, 0},
 }
 
-local upload_monitor = ValueMonitor:new {
-    label = "U"
-}
+local function simplify_size(bytes)
+    bytes = bytes / 1024
 
-local function update_widget_value(widget, new_usage_bytes)
-    local last_value = widget.last_value or new_usage_bytes
-    local usage_bytes = (new_usage_bytes - last_value) / widget_config.update_time_secs
+    if bytes < 1024 then
+        return {
+            value = bytes,
+            symbol = "kb"
+        }
+    end
+
+    bytes = bytes / 1024
 
     return {
-        formatted = string_format("%.02f MB/s", usage_bytes / 1024 / 1024)
+        value = bytes,
+        symbol = "mb"
     }
 end
 
-download_monitor.on_set = update_widget_value
-upload_monitor.on_set = update_widget_value
+net_monitor.on_set = function(widget, new_bytes)
+    local usage_down = (new_bytes[1] - widget.last_value[1]) / widget_config.update_time_secs
+    local usage_up = (new_bytes[2] - widget.last_value[2]) / widget_config.update_time_secs
+
+    local down = simplify_size(usage_down)
+    local up = simplify_size(usage_up)
+
+    return {
+        formatted = string_format("%.01f %s / %.01f %s",
+            down.value,
+            down.symbol,
+            up.value,
+            up.symbol)
+    }
+end
 
 net.widget = wibox.widget {
     layout = wibox.layout.fixed.horizontal,
-    download_monitor.textbox,
-    {
-        layout = wibox.container.margin,
-        left = widget_config.space_between_stats,
-        upload_monitor.textbox,
-    },
+    net_monitor.textbox,
 }
 
 awful.widget.watch("cat /proc/net/dev", widget_config.update_time_secs, function(widget, stdout)
@@ -46,8 +60,7 @@ awful.widget.watch("cat /proc/net/dev", widget_config.update_time_secs, function
             widget_config.interface .. ":%s+(%d+)%s+%d+%s+%d+%s+%d+%s+%d+%s+%d+%s+%d+%s+%d+%s+(%d+)")
     }
 
-    download_monitor:set_value(raw_stats[1])
-    upload_monitor:set_value(raw_stats[2])
+    net_monitor:set_value(raw_stats)
 end)
 
 return net
