@@ -42,16 +42,16 @@ config.program_shortcuts = {
     {
         modifier = { config.modkey },
         key = "bracketleft",
-        exec = "spotify --force-device-scale-factor=2"
+        exec = "lollypop"
     },
 }
 
 config.tags = {
     { name = "web" },
     { name = "dev" },
-    { name = "misc1" },
-    { name = "misc2" },
-    { name = "spotify" },
+    { name = "3" },
+    { name = "4" },
+    { name = "5" },
     {
         name = "steam",
         layout = awful.layout.suit.floating,
@@ -86,7 +86,6 @@ config.widgets = {
     },
     volume = {
         update_time_secs = 15,
-        spotify_update_time_secs = 5,
     },
     disk_usage = {
         partitions = { "/", "/home", "/media/data" },
