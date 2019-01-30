@@ -9,6 +9,8 @@ local naughty = require("naughty")
 
 local config = require("config")
 
+awful.screen.set_auto_dpi_enabled(true)
+
 -- Init the theme now so widgets can access custom theme values
 beautiful.init(config.theme_path)
 
@@ -52,8 +54,6 @@ do
         in_error = false
     end)
 end
-
-awful.screen.set_auto_dpi_enabled(true)
 
 awful.layout.layouts = {
     awful.layout.suit.tile,
