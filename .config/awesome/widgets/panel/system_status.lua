@@ -9,11 +9,10 @@ local wibox = require("wibox")
 local widget = require("widgets/value_monitor")
 local file = require("util/file")
 
-local popup = require("widgets/panel/system_status/popup")
-
 local string_match = string.match
 local string_sub = string.sub
 local string_format = string.format
+local os_date = os.date
 
 local widget_config = config.widgets.system_status
 
@@ -152,11 +151,132 @@ end
 
 system_status.widget = wibox.widget {
     layout = wibox.layout.fixed.horizontal,
-    buttons = gears.table.join(
-        awful.button({}, 1, function() popup:toggle() end),
-        awful.button({}, 3, system_status.update)
-    ),
     value_monitor.textbox,
+}
+
+local popup = {}
+
+system_status.widget:connect_signal("button::press", function(_, _, _, button, _, geo)
+    if button == 1 then -- Left mouse button
+        popup.show(geo)
+    elseif button == 3 then -- Right mouse button
+        system_status.update()
+    end
+end)
+
+popup.show = function(geo)
+    popup.update_uptime()
+    popup.uptime_timer:again()
+
+    popup.widget:move_next_to(geo)
+    popup.widget.visible = true
+end
+
+popup.hide = function()
+    popup.widget.visible = false
+    popup.uptime_timer:stop()
+end
+
+popup.uptime_timer = gears.timer {
+    timeout = 1,
+    autostart = false,
+    callback = function() popup:update_uptime() end,
+}
+
+popup.uptime_widget = ValueMonitor:new {
+    label = "Uptime",
+}
+
+popup.uptime_widget.on_set = function(_, time)
+    return { formatted = os_date("!%H:%M:%S", time) }
+end
+
+popup.update_uptime = function()
+    local uptime_contents = file.read("/proc/uptime")
+    local uptime_seconds = uptime_contents:sub(1, uptime_contents:find(' '))
+    
+    popup.uptime_widget:set_value(uptime_seconds)
+end
+
+popup.kernel_widget = ValueMonitor:new {
+    label = "Kernel",
+}
+
+awful.spawn.easy_async("uname -r", function(stdout)
+    popup.kernel_widget:set_value(stdout:sub(1, #stdout - 1))
+end)
+
+popup.graphics_driver_ver_widget = ValueMonitor:new {
+    label = "GPU Driver",
+}
+
+awful.spawn.easy_async("modinfo nvidia", function(stdout, _, _, exit_code)
+    if exit_code ~= 0 then
+        popup.graphics_driver_ver_widget:set_value("unknown")
+        return
+    end
+
+    local version = string_match(stdout, "version:%s+(.-)\n")
+    popup.graphics_driver_ver_widget:set_value(version)
+end)
+
+popup.lua_runtime_widget = ValueMonitor:new {
+    label = "Runtime",
+}
+
+if type(jit) == "table" then
+    local version = jit.version
+    local extra_tag_pos = version:find('-')
+
+    if extra_tag_pos ~= nil then
+        version = version:sub(1, extra_tag_pos - 1)
+    end
+
+    popup.lua_runtime_widget:set_value(version)
+else
+    popup.lua_runtime_widget:set_value(_VERSION)
+end
+
+popup.widget = awful.popup {
+    widget = wibox.widget {
+        {
+            layout = wibox.layout.fixed.vertical,
+            {
+                layout = wibox.container.margin,
+                bottom = 10,
+                {
+                    markup = "<b>System Info</b>",
+                    align = "center",
+                    widget = wibox.widget.textbox,
+                },
+            },
+            {
+                align = "center",
+                widget = popup.uptime_widget.textbox,
+            },
+            {
+                align = "center",
+                widget = popup.kernel_widget.textbox,
+            },
+            {
+                align = "center",
+                widget = popup.graphics_driver_ver_widget.textbox,
+            },
+            {
+                align = "center",
+                widget = popup.lua_runtime_widget.textbox,
+            },
+        },
+        margins = 10,
+        widget = wibox.container.margin,
+        buttons = gears.table.join(
+            awful.button({}, 3, function() popup.hide() end)
+        ),
+    },
+    opacity = config.panel_opacity,
+    ontop = true,
+    border_width = 1,
+    visible = false,
 }
 
 if not config.dev_environment then
