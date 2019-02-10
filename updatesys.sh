@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-MODE="switch"
+MODE="boot"
 
 if [ $# -ne 0 ]; then
     MODE=$1
