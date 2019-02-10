@@ -7,7 +7,8 @@ if [ $# -ne 0 ]; then
 fi
 
 nixup --preupdate
+
 sudo nixos-rebuild $MODE --upgrade --cores 0
 
-echo "updated system packages:"
+printf "\n"
 nixup
