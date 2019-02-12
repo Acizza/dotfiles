@@ -6,9 +6,9 @@ if [ $# -ne 0 ]; then
     MODE=$1
 fi
 
-nixup --preupdate
+nixup --savestate
 
 sudo nixos-rebuild $MODE --upgrade --cores 0
 
 printf "\n"
-nixup
+nixup --fromstate
