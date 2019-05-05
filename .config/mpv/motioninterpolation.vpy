@@ -24,6 +24,10 @@ if "video_in" in globals():
     clip = video_in
     # Needed because clip FPS is missing
     src_fps_num = int(container_fps * 1e8)
+
+    if src_fps_num == 0:
+        src_fps_num = 30 * 1e8
+
     src_fps_den = int(1e8)
     clip = core.std.AssumeFPS(clip, fpsnum = src_fps_num, fpsden = src_fps_den)
 else:
