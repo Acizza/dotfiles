@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+
+unknown_flag() {
+    echo "unknown flag: $1"
+    echo
+    echo "flag combos:"
+    echo " w - Run in the Wine jail"
+    echo " n - Run without network access"
+    echo " t - Run with temporary private filesystem"
+}
+
+JAIL_LOCATION="~/firejail/default/"
+RUN_FLAGS=(--env=LD_LIBRARY_PATH=$LD_LIBRARY_PATH --noprofile)
+
+while read -n1 char; do
+    case $char in
+        w)
+            JAIL_LOCATION="~/firejail/wine/"
+            ;;
+        n)
+            RUN_FLAGS+=(--net=none)
+            ;;
+        t)
+            JAIL_LOCATION=""
+            ;;
+        *)
+            unknown_flag $char
+            exit 1
+            ;;
+    esac
+done < <(echo -n "$1")
+
+if [[ ! -z $JAIL_LOCATION ]]; then
+    RUN_FLAGS+=(--private=$JAIL_LOCATION)
+else
+    RUN_FLAGS+=(--private)
+fi
+
+exec firejail ${RUN_FLAGS[@]} "${@:2}"
