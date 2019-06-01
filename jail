@@ -6,22 +6,26 @@ unknown_flag() {
     echo "flag combos:"
     echo " w - Run in the Wine jail"
     echo " n - Run without network access"
-    echo " t - Run with temporary private filesystem"
+    echo " d - Run in the specified private directory"
 }
 
-JAIL_LOCATION="~/firejail/default/"
-RUN_FLAGS=(--env=LD_LIBRARY_PATH=$LD_LIBRARY_PATH --noprofile)
+JAIL_LOCATION=""
+RUN_FLAGS=(--noprofile --env=LD_LIBRARY_PATH=$LD_LIBRARY_PATH)
+ARG_OFFSET=2
 
 while read -n1 char; do
     case $char in
         w)
-            JAIL_LOCATION="~/firejail/wine/"
+            JAIL_LOCATION=~/firejail/wine/
+            mkdir -p $JAIL_LOCATION
             ;;
         n)
             RUN_FLAGS+=(--net=none)
             ;;
-        t)
-            JAIL_LOCATION=""
+        d)
+            JAIL_LOCATION=~/firejail/$2
+            mkdir -p $JAIL_LOCATION
+            ((++ARG_OFFSET))
             ;;
         *)
             unknown_flag $char
@@ -36,4 +40,4 @@ else
     RUN_FLAGS+=(--private)
 fi
 
-exec firejail ${RUN_FLAGS[@]} "${@:2}"
+exec firejail ${RUN_FLAGS[@]} "${@:$ARG_OFFSET}"
