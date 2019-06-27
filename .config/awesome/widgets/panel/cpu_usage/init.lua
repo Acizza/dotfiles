@@ -93,7 +93,7 @@ awful.spawn.easy_async("nproc", function(num_cores)
                         widget = wibox.widget.textbox,
                     },
                 },
-                unpack(usage_widgets),
+                table.unpack(usage_widgets),
             },
             margins = 10,
             widget = wibox.container.margin,

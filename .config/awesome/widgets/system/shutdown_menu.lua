@@ -73,7 +73,7 @@ function shutdown_menu:initialize()
             layout = wibox.container.margin,
             top = 15,
         },
-        unpack(option_items)
+        table.unpack(option_items)
     }
 
     self:setup({

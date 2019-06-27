@@ -58,7 +58,7 @@ do
 
     disk_usage.widget = wibox.widget {
         layout = wibox.layout.fixed.horizontal,
-        unpack(widgets)
+        table.unpack(widgets)
     }
 end
 
