@@ -1,0 +1,132 @@
+[colors]
+background = #2d2d2d
+background-alt = #333333
+foreground = #dfdfdf
+foreground-alt = #aaaaaa
+primary = #aaffb52a
+secondary = #0a81f5
+alert = #bd2c40
+
+[bar/main]
+width = 100%
+height = 40
+bottom = true
+fixed-center = false
+dpi = 0
+
+line-size = 2
+line-color = #f00
+
+font-0 = "DejaVu Sans Mono:size=11;4"
+
+background = ${colors.background}
+foreground = ${colors.foreground}
+border-top-size = 2
+border-color = #333333
+
+padding-right = 1
+
+scroll-up = i3wm-wsnext
+scroll-down = i3wm-wsprev
+
+tray-position = right
+tray-padding = 2
+tray-maxsize = 48
+
+module-margin = 2
+
+modules-left = i3
+modules-center = 
+modules-right = updatestatus filesystem memory cpu pulseaudio date
+
+[module/i3]
+type = internal/i3
+
+format = <label-state> <label-mode>
+enable-scroll = false
+
+label-mode-padding = 2
+label-mode-foreground = #aa000000
+label-mode-background = ${colors.primary}
+
+; focused = Active workspace on focused monitor
+label-focused = %name%
+label-focused-background = ${colors.background-alt}
+label-focused-underline = ${colors.primary}
+label-focused-padding = 2
+
+; unfocused = Inactive workspace on any monitor
+label-unfocused = %name%
+label-unfocused-padding = 2
+
+; visible = Active workspace on unfocused monitor
+label-visible = %name%
+label-visible-background = ${self.label-focused-background}
+label-visible-underline = ${self.label-focused-underline}
+label-visible-padding = ${self.label-focused-padding}
+
+; urgent = Workspace with urgency hint set
+label-urgent = %name%
+label-urgent-background = ${colors.alert}
+label-urgent-padding = 2
+
+[module/updatestatus]
+type = custom/script
+interval = 7200 # 2 hours
+
+exec = nixos-update-status
+
+format-prefix = "SYS "
+format-prefix-foreground = #0a81f5
+
+[module/filesystem]
+type = internal/fs
+interval = 30
+
+mount-0 = /
+mount-1 = /home
+mount-2 = /media/data
+
+fixed-values = true
+
+label-mounted = %{F#0a81f5}%mountpoint%%{F-} %{F#aaaaaa}%free%%{F-}
+label-unmounted = %{F#0a81f5}%mountpoint%%{F-}
+
+[module/memory]
+type = internal/memory
+interval = 1.5
+
+format = <label>
+label = %{F#0a81f5}RAM%{F-} %{F#aaaaaa}%gb_used%%{F-}
+
+[module/cpu]
+type = internal/cpu
+interval = 1
+
+format = <label>
+label = %{F#0a81f5}CPU%{F-} %{F#aaaaaa}%percentage:2%%%{F-}
+
+[module/pulseaudio]
+type = internal/pulseaudio
+
+use-ui-max = false
+interval = 1
+
+label-volume = %{F#0a81f5}VOL%{F-} %{F#aaaaaa}%percentage:2%%%{F-}
+label-muted = %{F#0a81f5}VOL%{F-} %{F#ffe100}muted%{F-}
+
+[module/date]
+type = internal/date
+
+interval = 1
+
+date = "%a %b %d"
+time = "%H:%M:%S"
+
+label = %date%, %time%
+
+[settings]
+screenchange-reload = true
+pseudo-transparency = true
+
+format-foreground = ${colors.foreground-alt}
