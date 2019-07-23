@@ -1,1 +1,1 @@
-wal -Rq
+wal -Rqe
