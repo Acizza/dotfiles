@@ -29,7 +29,7 @@ bindsym $mod+backslash exec firefox
 bindsym $mod+bracketright exec "alacritty -e ~/ranger.sh"
 bindsym $mod+p exec anup
 bindsym $mod+Next exec gnome-system-monitor
-bindsym $mod+bracketleft exec lollypop
+bindsym $mod+bracketleft exec "firejail --blacklist=/media/ --whitelist=~/music --whitelist=~/.cache --whitelist=~/.config --noprofile spotify --force-device-scale-factor=2"
 
 ## Window keybindings
 
@@ -72,10 +72,10 @@ bindsym XF86AudioRaiseVolume exec amixer -q sset Master 1%+
 bindsym XF86AudioLowerVolume exec amixer -q sset Master 1%-
 bindsym XF86AudioMute exec amixer -q sset Master toggle
 
-bindsym XF86AudioPrev exec lollypop -p
-bindsym XF86AudioPause exec lollypop -t
-bindsym XF86AudioPlay exec lollypop -t
-bindsym XF86AudioNext exec lollypop -n
+bindsym XF86AudioPrev exec "dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Previous"
+bindsym XF86AudioPause exec "dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause"
+bindsym XF86AudioPlay exec "dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause"
+bindsym XF86AudioNext exec "dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Next"
 
 ## Workspaces
 
