@@ -1,0 +1,50 @@
+{
+    "layer": "bottom",
+    "position": "bottom",
+    "height": 40,
+    "modules-left": ["sway/workspaces", "sway/mode"],
+    "modules-center": ["sway/window"],
+    "modules-right": ["disk", "disk#home", "disk#media", "memory", "cpu", "pulseaudio", "clock", "tray"],
+    "sway/mode": {
+        "format": "<span style=\"italic\">{}</span>"
+    },
+    "disk": {
+        "interval": 30,
+        "format": "/ {free}",
+        "path": "/"
+    },
+    "disk#home": {
+        "interval": 30,
+        "format": "/home {free}",
+        "path": "/home"
+    },
+    "disk#media": {
+        "interval": 30,
+        "format": "/media {free}",
+        "path": "/media/data"
+    },
+    "tray": {
+        "icon-size": 21,
+        "spacing": 10
+    },
+    "clock": {
+        "format": "{:%a %b %d, %H:%M:%S}",
+        "interval": 1
+    },
+    "cpu": {
+        "format": "{usage}% ",
+        "tooltip": false,
+        "interval": 1
+    },
+    "memory": {
+        "format": "{used:0.2f} GB ",
+        "tooltip": false,
+        "interval": 2
+    },
+    "pulseaudio": {
+        // "scroll-step": 1, // %, can be a float
+        "format": "{volume}%",
+        "format-source-muted": "m",
+        "on-click": "pavucontrol"
+    }
+}
