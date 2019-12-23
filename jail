@@ -10,7 +10,7 @@ unknown_flag() {
 }
 
 JAIL_LOCATION=""
-RUN_FLAGS=(--noprofile)
+RUN_FLAGS=(--noprofile --blacklist=/media/)
 ARG_OFFSET=2
 
 while read -n1 char; do
