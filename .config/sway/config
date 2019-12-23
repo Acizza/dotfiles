@@ -15,7 +15,6 @@ exec_always {
   gsettings set org.gnome.desktop.interface gtk-theme "Arc-Dark"
   gsettings set org.gnome.desktop.interface icon-theme "Arc"
   gsettings set org.gnome.desktop.interface cursor-size 48
-  gsettings set org.gnome.desktop.interface scaling-factor 2
 }
 
 exec swayidle -w \
@@ -52,8 +51,9 @@ bindsym $mod+Return exec alacritty
 bindsym $mod+backslash exec "GDK_DPI_SCALE=2 firefox"
 bindsym $mod+bracketright exec "alacritty -e ranger"
 bindsym $mod+o exec "codium --force-device-scale-factor=2"
-bindsym $mod+p exec anup
-bindsym $mod+Shift+p exec "alacritty --class Alacritty_anup -e anup -i"
+bindsym $mod+Shift+p exec "anup -s"
+bindsym $mod+Control+p exec "alacritty --class Alacritty_anup -e anup -o"
+bindsym $mod+p exec "alacritty --class Alacritty_anup -e anup"
 bindsym $mod+Next exec gnome-system-monitor
 bindsym $mod+bracketleft exec "firejail --blacklist=/media/ --whitelist=~/music --whitelist=~/.cache --whitelist=~/.config --noprofile spotify --force-device-scale-factor=2"
 bindsym $mod+Shift+bracketleft exec "firejail --net=none --blacklist=/media/ --whitelist=~/music --whitelist=~/.cache --whitelist=~/.config --noprofile spotify --force-device-scale-factor=2"
