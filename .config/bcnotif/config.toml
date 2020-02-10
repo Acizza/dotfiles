@@ -1,0 +1,15 @@
+[weekday.saturday.global]
+jump_required = 45
+
+[weekday.sunday.global]
+jump_required = 45
+
+[feed."county(Sacramento)"]
+jump_required = 30
+
+[misc]
+process_location = "us-california"
+show_max_times = 5
+
+[sorting]
+order = "ascending"
