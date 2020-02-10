@@ -21,7 +21,7 @@
     "disk#media": {
         "interval": 30,
         "format": "/media {free}",
-        "path": "/media/data"
+        "path": "/media"
     },
     "tray": {
         "icon-size": 21,
