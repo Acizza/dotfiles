@@ -137,6 +137,7 @@ for_window [app_id="qemu-system-x86_64"] floating enable
 for_window [app_id="eog"] floating enable
 for_window [class="Steam"] floating enable
 for_window [app_id="Alacritty_anup"] floating enable
+for_window [app_id="anki"] floating enable
 
 ## Modes
 
