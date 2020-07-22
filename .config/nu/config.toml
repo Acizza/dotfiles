@@ -1,0 +1,3 @@
+ctrlc_exit = "false"
+startup = ["alias code [x] { codium --force-device-scale-factor=2 $x }", "alias cargo-native-rel [] { with-env [RUSTFLAGS \"-Ctarget-cpu=native\"] { cargo build --release; strip target/release/* } }"]
+use_starship = true
