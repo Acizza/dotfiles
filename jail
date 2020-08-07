@@ -5,6 +5,7 @@ unknown_flag() {
     echo
     echo "flag combos:"
     echo " w - Run in the Wine jail"
+    echo " s - Run in the Steam jail"
     echo " n - Run without network access"
     echo " d - Run in the specified private directory"
 }
@@ -16,14 +17,18 @@ ARG_OFFSET=2
 while read -n1 char; do
     case $char in
         w)
-            JAIL_LOCATION=~/firejail/wine/
+            JAIL_LOCATION=~/games/
+            mkdir -p $JAIL_LOCATION
+            ;;
+        s)
+            JAIL_LOCATION=~/games/steam/
             mkdir -p $JAIL_LOCATION
             ;;
         n)
             RUN_FLAGS+=(--net=none)
             ;;
         d)
-            JAIL_LOCATION=~/firejail/$2
+            JAIL_LOCATION=~/jail/$2
             mkdir -p $JAIL_LOCATION
             ((++ARG_OFFSET))
             ;;
