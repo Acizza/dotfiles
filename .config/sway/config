@@ -1,5 +1,5 @@
 exec --no-startup-id ~/.config/sway/random_background.sh
-output DP-1 bg ~/backgrounds/active/current stretch
+output "*" bg ~/backgrounds/active/current stretch
 
 input 1133:16465:Logitech_M510 {
   pointer_accel 0
