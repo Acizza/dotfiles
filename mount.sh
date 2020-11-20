@@ -9,16 +9,19 @@ unknown_flag() {
     echo " u - Unmount"
 }
 
+LOCATION=""
+
 while read -n1 char; do
     case $char in
         l)
-            sshfs wendy@w.laptop -o allow_other /mnt
+            LOCATION="wendy@w.laptop:/"
             ;;
         p)
-            sshfs pi@rasp.pi:/media -o allow_other /mnt
+            LOCATION="pi@rasp.pi:/media"
             ;;
         u)
             fusermount -u /mnt
+            exit 0
             ;;
         *)
             unknown_flag $char
@@ -26,3 +29,5 @@ while read -n1 char; do
             ;;
     esac
 done < <(echo -n "$1")
+
+exec sshfs "$LOCATION" -o allow_other,reconnect,ServerAliveInterval=15,ServerAliveCountMax=3 /mnt
