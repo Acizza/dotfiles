@@ -33,12 +33,12 @@
         "interval": 1
     },
     "cpu": {
-        "format": "{usage}% ",
+        "format": "{usage}%",
         "tooltip": false,
         "interval": 1
     },
     "memory": {
-        "format": "{used:0.2f} GB ",
+        "format": "{used:0.2f} GB",
         "tooltip": false,
         "interval": 2
     },
